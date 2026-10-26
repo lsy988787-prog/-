@@ -1,0 +1,4955 @@
+{
+  "schemaVersion": "1.1",
+  "id": "power-system-analysis-swjtu-inspired",
+  "title": "电力系统分析",
+  "subject": "电气工程",
+  "level": "大学",
+  "source": "preset",
+  "language": "zh-CN",
+  "description": "以中国大学 MOOC 西南交通大学《电力系统分析》公开课程主题为蓝本组织的原创教学内容，覆盖电力系统基础、元件建模、潮流计算、短路故障与牵引供电。",
+  "contentVersion": "0.3.0-draft",
+  "generatedOn": "2026-10-25",
+  "reviewStatus": "pending",
+  "license": {
+    "code": "MIT",
+    "content": "CC BY 4.0"
+  },
+  "sourceRefs": [
+    {
+      "title": "中国大学 MOOC：西南交通大学《电力系统分析》",
+      "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+      "note": "仅参考课程主题组织，不含视频、课件或教材原文；课时编号映射待按公开大纲补充。"
+    },
+    {
+      "title": "王晓茹、高仕斌主编《电力系统分析》第二版，高等教育出版社",
+      "url": "",
+      "note": "该课程页面列出的参考教材。"
+    }
+  ],
+  "chapters": [
+    {
+      "id": "ch1-intro",
+      "order": 1,
+      "title": "认识电力系统",
+      "description": "电力系统的组成、电压等级、负荷、电能质量与中性点接地方式。",
+      "concepts": [
+        {
+          "id": "ps-composition",
+          "chapterId": "ch1-intro",
+          "order": 1,
+          "title": "电力系统的组成与运行特点",
+          "prerequisites": [],
+          "summary": "电力系统由发电、输电、变电、配电和用电五个环节组成，发电与用电必须实时平衡。",
+          "explanation": "电力系统是把一次能源转换成电能并输送、分配给用户的整体，包括发电厂、升降压变电站、输电线路、配电网和用户负荷。只包含输电、变电、配电部分的称为电力网。与其他能源系统相比，电能难以大量经济地储存，因此发电量必须时刻跟随用电量变化；电磁暂态过程以毫秒计，故障若不及时切除会迅速扩大；电力系统又与工业生产和居民生活紧密相关。由此得出对电力系统运行的基本要求：保证供电安全可靠、保证电能质量、提高运行经济性，并减少对环境的影响。",
+          "keyFormulas": [
+            {
+              "latex": "P_G = P_L + \\Delta P",
+              "display": "P_G = P_L + ΔP",
+              "variables": [
+                {
+                  "symbol": "P_G",
+                  "meaning": "系统总发电功率",
+                  "unit": "MW"
+                },
+                {
+                  "symbol": "P_L",
+                  "meaning": "用户总负荷",
+                  "unit": "MW"
+                },
+                {
+                  "symbol": "ΔP",
+                  "meaning": "网络总损耗",
+                  "unit": "MW"
+                }
+              ],
+              "conditions": "任一时刻有功功率平衡；无功功率同样需要平衡。"
+            }
+          ],
+          "workedExample": {
+            "problem": "某地区电网某时刻用户总负荷为 300 MW，线损率（损耗占供电量的比例）为 3%，此时发电厂需要送出多少有功功率？",
+            "steps": [
+              "线损率定义为 ΔP / P_G = 3%，所以 P_L = P_G (1 − 0.03)。",
+              "P_G = 300 / 0.97 ≈ 309.3 MW。",
+              "其中网络损耗约 9.3 MW。"
+            ],
+            "answer": "约 309.3 MW"
+          },
+          "misconceptions": [
+            {
+              "wrong": "电能可以像煤一样先存起来再用。",
+              "correct": "电能难以大量经济储存，抽水蓄能和电池储能只占很小比例，系统必须实时平衡。"
+            },
+            {
+              "wrong": "电力网就是电力系统。",
+              "correct": "电力网只包括输电、变电、配电设备，不含发电厂和用户负荷。"
+            }
+          ],
+          "visualization": null,
+          "images": [],
+          "practice": [
+            {
+              "question": "为什么说“频率是有功功率平衡的晴雨表”？",
+              "answer": "有功不平衡时发电机转速随之变化，频率偏离额定值。",
+              "explanation": "发电机输入机械功率与输出电磁功率之差使转子加速或减速，频率随之变化，所以频率反映全系统有功平衡情况。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "如果某一刻用电突然增加而发电没跟上，你觉得系统里哪个量会先变化？",
+              "电能不能大量储存，这会给运行带来什么要求？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "ps-voltage-levels",
+          "chapterId": "ch1-intro",
+          "order": 2,
+          "title": "额定电压等级与各元件额定电压",
+          "prerequisites": [
+            "ps-composition"
+          ],
+          "summary": "我国交流电网额定电压分级，发电机和变压器的额定电压按“补偿线路压降”的原则高于网络额定电压。",
+          "explanation": "输送功率一定时，电压越高电流越小，线路损耗和压降越小，但绝缘与设备投资越大，因此电网按标准电压等级分层建设。我国常用交流额定电压（线电压）有 0.38、3、6、10、20、35、66、110、220、330、500、750、1000 kV。线路首端电压高、末端电压低，平均约等于额定电压，所以用电设备的额定电压等于网络额定电压；发电机位于线路首端，额定电压比网络额定电压高 5%；变压器一次绕组相当于用电设备，额定电压等于网络额定电压（直接接发电机时等于发电机额定电压），二次绕组相当于电源，一般比网络额定电压高 10%（短路电压较小或直接向近处负荷供电时可只高 5%）。短路计算中常用的平均额定电压约为 1.05 倍额定电压：10.5、37、115、230、345、525 kV。",
+          "keyFormulas": [
+            {
+              "latex": "U_{GN} = 1.05\\,U_N",
+              "display": "U_GN = 1.05 U_N",
+              "variables": [
+                {
+                  "symbol": "U_GN",
+                  "meaning": "发电机额定电压",
+                  "unit": "kV"
+                },
+                {
+                  "symbol": "U_N",
+                  "meaning": "所接网络额定电压",
+                  "unit": "kV"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "U_{2N} = (1.05 \\sim 1.10)\\,U_N",
+              "display": "U_2N = (1.05~1.10) U_N",
+              "variables": [
+                {
+                  "symbol": "U_2N",
+                  "meaning": "变压器二次侧额定电压",
+                  "unit": "kV"
+                },
+                {
+                  "symbol": "U_N",
+                  "meaning": "二次侧所接网络额定电压",
+                  "unit": "kV"
+                }
+              ],
+              "conditions": "二次侧所接线路较长时取 1.10。"
+            },
+            {
+              "latex": "U_{av} \\approx 1.05\\,U_N",
+              "display": "U_av ≈ 1.05 U_N",
+              "variables": [
+                {
+                  "symbol": "U_av",
+                  "meaning": "平均额定电压",
+                  "unit": "kV"
+                }
+              ],
+              "conditions": "用于短路实用计算的近似。"
+            }
+          ],
+          "workedExample": {
+            "problem": "一台发电机接在 10 kV 母线上，经升压变压器送入 110 kV 输电线路。求发电机额定电压和升压变压器额定变比。",
+            "steps": [
+              "发电机额定电压 = 1.05 × 10 = 10.5 kV。",
+              "变压器一次侧直接接发电机，额定电压取 10.5 kV。",
+              "二次侧接 110 kV 线路，额定电压取 1.10 × 110 = 121 kV。"
+            ],
+            "answer": "发电机 10.5 kV；变压器额定变比 10.5/121 kV"
+          },
+          "misconceptions": [
+            {
+              "wrong": "变压器两侧额定电压就是两侧网络的额定电压。",
+              "correct": "二次侧要补偿变压器内部压降和线路压降，通常比网络额定电压高 5%~10%。"
+            },
+            {
+              "wrong": "额定电压指相电压。",
+              "correct": "三相系统的额定电压指线电压。"
+            }
+          ],
+          "visualization": {
+            "calculator": "rated-voltage-chain",
+            "params": [
+              {
+                "id": "UN1",
+                "label": "一次侧网络额定电压",
+                "unit": "kV",
+                "min": 6,
+                "max": 500,
+                "step": 1,
+                "default": 10
+              },
+              {
+                "id": "UN2",
+                "label": "二次侧网络额定电压",
+                "unit": "kV",
+                "min": 0.38,
+                "max": 500,
+                "step": 1,
+                "default": 110
+              },
+              {
+                "id": "k2",
+                "label": "二次侧高出比例",
+                "unit": "%",
+                "min": 5,
+                "max": 10,
+                "step": 5,
+                "default": 10
+              }
+            ],
+            "output": "发电机额定电压、变压器额定变比",
+            "assumptions": "按教材约定的额定电压规则计算，不涉及具体产品分接头。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "一台降压变压器从 220 kV 电网向 110 kV 电网供电，其额定变比通常是多少？",
+              "answer": "220/121 kV",
+              "explanation": "一次侧等于网络额定电压 220 kV，二次侧按高 10% 取 121 kV。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "线路首端和末端的电压一样高吗？这和发电机额定电压高 5% 有什么关系？",
+              "变压器二次侧对它所接的线路来说扮演什么角色？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "ps-load-curve",
+          "chapterId": "ch1-intro",
+          "order": 3,
+          "title": "负荷曲线与最大负荷利用小时数",
+          "prerequisites": [
+            "ps-composition"
+          ],
+          "summary": "负荷曲线描述负荷随时间的变化，最大负荷利用小时数和负荷率概括其形状，用于规划和经济分析。",
+          "explanation": "按时间段不同，负荷曲线分日、周、年负荷曲线；按内容分有功和无功负荷曲线。日负荷曲线的峰谷差决定了调峰需求。把一年的用电量折算成按最大负荷连续运行的小时数，就是最大负荷利用小时数 T_max，它越大说明负荷越平稳。平均负荷与最大负荷之比称为负荷率。年持续负荷曲线把全年负荷从大到小排列，面积等于年用电量。负荷特性还包括负荷随电压、频率变化的静态特性，见“负荷模型”一节。",
+          "keyFormulas": [
+            {
+              "latex": "T_{max} = \\dfrac{W}{P_{max}}",
+              "display": "T_max = W / P_max",
+              "variables": [
+                {
+                  "symbol": "T_max",
+                  "meaning": "最大负荷利用小时数",
+                  "unit": "h"
+                },
+                {
+                  "symbol": "W",
+                  "meaning": "年用电量",
+                  "unit": "MWh"
+                },
+                {
+                  "symbol": "P_max",
+                  "meaning": "年最大负荷",
+                  "unit": "MW"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "k_L = \\dfrac{P_{av}}{P_{max}}",
+              "display": "k_L = P_av / P_max",
+              "variables": [
+                {
+                  "symbol": "k_L",
+                  "meaning": "负荷率",
+                  "unit": "—"
+                },
+                {
+                  "symbol": "P_av",
+                  "meaning": "平均负荷",
+                  "unit": "MW"
+                }
+              ],
+              "conditions": ""
+            }
+          ],
+          "workedExample": {
+            "problem": "某用户年最大负荷 50 MW，年用电量 25 万 MWh。求最大负荷利用小时数和年负荷率。",
+            "steps": [
+              "T_max = 250000 / 50 = 5000 h。",
+              "年平均负荷 P_av = 250000 / 8760 ≈ 28.54 MW。",
+              "负荷率 k_L = 28.54 / 50 ≈ 0.571。"
+            ],
+            "answer": "T_max = 5000 h；负荷率约 0.571"
+          },
+          "misconceptions": [
+            {
+              "wrong": "T_max 是负荷达到最大值的实际小时数。",
+              "correct": "T_max 是折算值，实际负荷很少恰好处于最大值。"
+            },
+            {
+              "wrong": "年负荷率越低越好。",
+              "correct": "负荷率越高设备利用越充分，峰谷差小，系统运行越经济。"
+            }
+          ],
+          "visualization": {
+            "calculator": "load-factor",
+            "params": [
+              {
+                "id": "W",
+                "label": "年用电量",
+                "unit": "万MWh",
+                "min": 1,
+                "max": 100,
+                "step": 1,
+                "default": 25
+              },
+              {
+                "id": "Pmax",
+                "label": "年最大负荷",
+                "unit": "MW",
+                "min": 1,
+                "max": 500,
+                "step": 1,
+                "default": 50
+              }
+            ],
+            "output": "T_max、平均负荷、负荷率",
+            "assumptions": "一年按 8760 h 计。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "两个用户年用电量相同，一个 T_max = 6000 h，另一个 T_max = 3000 h，哪个最大负荷更大？",
+              "answer": "T_max = 3000 h 的用户最大负荷是前者的 2 倍。",
+              "explanation": "P_max = W / T_max，用电量相同时 T_max 越小，最大负荷越大。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "如果全年都按最大负荷用电，T_max 会是多少？",
+              "峰谷差大的负荷对发电厂意味着什么？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "ps-power-quality",
+          "chapterId": "ch1-intro",
+          "order": 4,
+          "title": "电能质量：电压、频率与波形",
+          "prerequisites": [
+            "ps-composition",
+            "ps-voltage-levels"
+          ],
+          "summary": "电能质量主要看电压偏差、频率偏差和波形畸变，我国有对应国家标准规定允许范围。",
+          "explanation": "电压偏差影响用电设备效率和寿命，主要与无功功率平衡和网络压降有关；频率偏差影响电动机转速和同步设备运行，主要取决于有功功率平衡；波形质量用谐波含量描述，由整流、变频等非线性负荷引起。此外还有三相不平衡、电压波动与闪变等指标。国家标准 GB/T 12325 规定供电电压偏差限值，例如 20 kV 及以下三相供电为额定电压的 ±7%，220 V 单相供电为 +7%、−10%；GB/T 15945 规定电力系统正常运行频率偏差限值为 ±0.2 Hz（系统容量较小时可放宽到 ±0.5 Hz）。具体数值以现行标准版本为准。",
+          "keyFormulas": [
+            {
+              "latex": "\\delta U\\% = \\dfrac{U - U_N}{U_N}\\times 100\\%",
+              "display": "δU% = (U − U_N) / U_N × 100%",
+              "variables": [
+                {
+                  "symbol": "δU%",
+                  "meaning": "电压偏差",
+                  "unit": "%"
+                },
+                {
+                  "symbol": "U",
+                  "meaning": "实际电压",
+                  "unit": "kV"
+                },
+                {
+                  "symbol": "U_N",
+                  "meaning": "额定电压",
+                  "unit": "kV"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "\\Delta f = f - f_N",
+              "display": "Δf = f − f_N",
+              "variables": [
+                {
+                  "symbol": "Δf",
+                  "meaning": "频率偏差",
+                  "unit": "Hz"
+                },
+                {
+                  "symbol": "f_N",
+                  "meaning": "额定频率 50",
+                  "unit": "Hz"
+                }
+              ],
+              "conditions": ""
+            }
+          ],
+          "workedExample": {
+            "problem": "某 10 kV 用户母线实测电压 10.6 kV，系统频率 49.85 Hz。电压和频率偏差是否满足上面给出的限值？",
+            "steps": [
+              "电压偏差 = (10.6 − 10) / 10 × 100% = +6%，在 ±7% 以内。",
+              "频率偏差 = 49.85 − 50 = −0.15 Hz，在 ±0.2 Hz 以内。"
+            ],
+            "answer": "电压偏差 +6%、频率偏差 −0.15 Hz，均满足"
+          },
+          "misconceptions": [
+            {
+              "wrong": "电压低是因为有功不够。",
+              "correct": "电压水平主要与无功平衡和网络压降有关，频率才主要反映有功平衡。"
+            },
+            {
+              "wrong": "各地电网频率可以不同。",
+              "correct": "同一同步电网稳态下频率处处相同，电压则各节点不同。"
+            }
+          ],
+          "visualization": null,
+          "images": [],
+          "practice": [
+            {
+              "question": "为什么说频率是全网统一的指标，而电压是局部指标？",
+              "answer": "同步运行的发电机转速相同，频率全网一致；电压受各处负荷和网络压降影响，因节点而异。",
+              "explanation": "这也决定了调频需要全网协调，调压可以分区分层就地进行。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "电压和频率分别主要由什么功率的平衡决定？",
+              "整流负荷会让电压波形变成什么样？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "ps-neutral-grounding",
+          "chapterId": "ch1-intro",
+          "order": 5,
+          "title": "中性点接地方式",
+          "prerequisites": [
+            "ps-voltage-levels"
+          ],
+          "summary": "中性点接地方式决定单相接地时的故障电流和非故障相电压，110 kV 及以上多直接接地，3~66 kV 多不接地或经消弧线圈接地。",
+          "explanation": "中性点直接接地系统单相接地即构成短路，故障电流大，保护迅速切除，非故障相电压基本不升高，绝缘要求低，适用于 110 kV 及以上电网。中性点不接地系统单相接地时只流过对地电容电流，三相线电压仍对称，可以带故障运行一段时间（一般不超过 2 h），供电可靠性高；但非故障相对地电压升高到线电压（√3 倍相电压），且电容电流较大时容易产生间歇性电弧过电压。电容电流超过规程限值时，中性点经消弧线圈接地，用电感电流补偿电容电流，一般采用过补偿。城市配电网也有经小电阻接地，以便快速切除故障。",
+          "keyFormulas": [
+            {
+              "latex": "I_C = 3\\,\\omega C\\,U_\\varphi",
+              "display": "I_C = 3 ω C U_φ",
+              "variables": [
+                {
+                  "symbol": "I_C",
+                  "meaning": "单相接地时的接地电容电流",
+                  "unit": "A"
+                },
+                {
+                  "symbol": "ω",
+                  "meaning": "角频率 2πf",
+                  "unit": "rad/s"
+                },
+                {
+                  "symbol": "C",
+                  "meaning": "每相对地电容",
+                  "unit": "F"
+                },
+                {
+                  "symbol": "U_φ",
+                  "meaning": "相电压",
+                  "unit": "V"
+                }
+              ],
+              "conditions": "中性点不接地、忽略线路阻抗和对地电导。"
+            },
+            {
+              "latex": "U_{B}' = U_{C}' = \\sqrt{3}\\,U_\\varphi",
+              "display": "U_B' = U_C' = √3 U_φ",
+              "variables": [
+                {
+                  "symbol": "U_B', U_C'",
+                  "meaning": "A 相金属性接地后非故障相对地电压",
+                  "unit": "kV"
+                }
+              ],
+              "conditions": "中性点不接地系统金属性单相接地。"
+            }
+          ],
+          "workedExample": {
+            "problem": "某 10 kV 中性点不接地系统，每相对地电容合计 2 μF。求 A 相金属性接地时的接地电流和非故障相对地电压。",
+            "steps": [
+              "相电压 U_φ = 10000 / √3 ≈ 5774 V。",
+              "I_C = 3 × 2π × 50 × 2×10⁻⁶ × 5774 ≈ 10.9 A。",
+              "非故障相对地电压 = √3 × 5.774 ≈ 10 kV，即升高到线电压。"
+            ],
+            "answer": "接地电流约 10.9 A；B、C 相对地电压约 10 kV"
+          },
+          "misconceptions": [
+            {
+              "wrong": "单相接地后三相线电压也不对称了。",
+              "correct": "中性点不接地系统单相接地后，中性点电位偏移，但三相线电压仍对称，用户仍可正常用电。"
+            },
+            {
+              "wrong": "消弧线圈一般欠补偿。",
+              "correct": "欠补偿在线路切除时可能接近全补偿而引起谐振，一般采用过补偿。"
+            }
+          ],
+          "visualization": {
+            "calculator": "ungrounded-capacitive-current",
+            "params": [
+              {
+                "id": "UN",
+                "label": "额定线电压",
+                "unit": "kV",
+                "min": 3,
+                "max": 66,
+                "step": 1,
+                "default": 10
+              },
+              {
+                "id": "C",
+                "label": "每相对地电容",
+                "unit": "μF",
+                "min": 0.1,
+                "max": 20,
+                "step": 0.1,
+                "default": 2
+              }
+            ],
+            "output": "接地电容电流、非故障相对地电压",
+            "assumptions": "金属性接地，忽略线路阻抗与对地电导。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "同样 10 kV 系统若电容翻倍，接地电容电流变为多少？",
+              "answer": "约 21.8 A",
+              "explanation": "I_C 与对地电容成正比。是否需要装消弧线圈应查 DL/T 620 等规程的限值。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "单相接地时，在不接地系统里电流从哪里形成回路？",
+              "为什么非故障相对地电压会升高？画一下相量图试试。"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "ps-complex-power",
+          "chapterId": "ch1-intro",
+          "order": 6,
+          "title": "复功率与三相功率回顾",
+          "prerequisites": [],
+          "summary": "用复功率 S = P + jQ 统一表示有功和无功；三相对称时 S = √3 U_L I_L，这是后续所有计算的基础。",
+          "explanation": "正弦稳态下，电压相量 U 与电流共轭相量 I* 的乘积称为复功率 S = U I* = P + jQ。按这个约定，感性负荷（电流滞后电压）的 Q 为正，表示吸收无功；容性负荷 Q 为负，表示发出无功。三相对称系统总功率是单相的 3 倍，用线电压、线电流表示为 S = √3 U_L I_L。功率因数 cosφ = P / S。本课程统一用线电压和三相功率，功率方向以“注入节点为正”或“负荷吸收为正”时需要在题目中明确。",
+          "keyFormulas": [
+            {
+              "latex": "\\dot S = \\dot U\\,\\dot I^{*} = P + jQ",
+              "display": "S = U·I* = P + jQ",
+              "variables": [
+                {
+                  "symbol": "S",
+                  "meaning": "复功率",
+                  "unit": "MVA"
+                },
+                {
+                  "symbol": "P",
+                  "meaning": "有功功率",
+                  "unit": "MW"
+                },
+                {
+                  "symbol": "Q",
+                  "meaning": "无功功率",
+                  "unit": "Mvar"
+                }
+              ],
+              "conditions": "感性负荷 Q > 0。"
+            },
+            {
+              "latex": "S = \\sqrt{3}\\,U_L I_L",
+              "display": "S = √3 U_L I_L",
+              "variables": [
+                {
+                  "symbol": "U_L",
+                  "meaning": "线电压",
+                  "unit": "kV"
+                },
+                {
+                  "symbol": "I_L",
+                  "meaning": "线电流",
+                  "unit": "kA"
+                }
+              ],
+              "conditions": "三相对称。"
+            }
+          ],
+          "workedExample": {
+            "problem": "一个 10 kV 三相负荷，有功 2 MW，功率因数 0.8（滞后）。求视在功率、无功功率和线电流。",
+            "steps": [
+              "S = P / cosφ = 2 / 0.8 = 2.5 MVA。",
+              "Q = √(2.5² − 2²) = 1.5 Mvar（感性，吸收）。",
+              "I = 2500 kVA / (√3 × 10 kV) ≈ 144.3 A。"
+            ],
+            "answer": "S = 2.5 MVA，Q = 1.5 Mvar，I ≈ 144.3 A"
+          },
+          "misconceptions": [
+            {
+              "wrong": "三相功率 = 3 × 线电压 × 线电流。",
+              "correct": "应为 √3 U_L I_L，或 3 U_φ I_φ。"
+            },
+            {
+              "wrong": "无功功率没有用，可以不管。",
+              "correct": "无功功率维持电磁场和电压水平，无功不足会导致电压下降。"
+            }
+          ],
+          "visualization": {
+            "calculator": "complex-power-triangle",
+            "params": [
+              {
+                "id": "P",
+                "label": "有功功率",
+                "unit": "MW",
+                "min": 0.1,
+                "max": 100,
+                "step": 0.1,
+                "default": 2
+              },
+              {
+                "id": "pf",
+                "label": "功率因数",
+                "unit": "—",
+                "min": 0.5,
+                "max": 1.0,
+                "step": 0.01,
+                "default": 0.8
+              },
+              {
+                "id": "UL",
+                "label": "线电压",
+                "unit": "kV",
+                "min": 0.38,
+                "max": 500,
+                "step": 0.1,
+                "default": 10
+              }
+            ],
+            "output": "S、Q、线电流与功率三角形",
+            "assumptions": "三相对称，感性负荷。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "功率因数从 0.8 提高到 0.95（P 不变），上例线电流变为多少？",
+              "answer": "约 121.5 A",
+              "explanation": "S = 2 / 0.95 ≈ 2.105 MVA，I = 2105 / (√3 × 10) ≈ 121.5 A。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "电流滞后电压时，按 S = U I* 计算出来的 Q 是正还是负？",
+              "为什么三相功率公式里出现 √3？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        }
+      ]
+    },
+    {
+      "id": "ch2-components",
+      "order": 2,
+      "title": "元件与统一建模",
+      "description": "线路、变压器、发电机、负荷的参数与等值电路，标幺制与 dq0 变换。",
+      "concepts": [
+        {
+          "id": "line-parameters",
+          "chapterId": "ch2-components",
+          "order": 1,
+          "title": "输电线路参数 R、X、G、B",
+          "prerequisites": [
+            "ps-complex-power"
+          ],
+          "summary": "架空线路每千米有电阻、电抗、电导、电纳四个参数，分别反映发热、磁场、泄漏与电晕、电场效应。",
+          "explanation": "电阻 r₁ = ρ/S，ρ 为考虑绞线和实际长度修正后的计算电阻率，铝取 31.5 Ω·mm²/km。电抗由导线自身和相间磁场决定，与几何均距 D_m 和导线等值半径有关，三相导线换位后各相电抗相等；架空线路单导线电抗约 0.4 Ω/km，分裂导线可降到约 0.3 Ω/km 以下。电纳由导线间和对地电容决定，约 2.8×10⁻⁶ S/km。电导反映绝缘子泄漏和电晕损耗，正常设计下电晕很小，一般取 g = 0。D_m 是三相导线间距离的几何平均值，导线水平排列间距 D 时 D_m = ∛2 · D ≈ 1.26 D。",
+          "keyFormulas": [
+            {
+              "latex": "r_1 = \\dfrac{\\rho}{S}",
+              "display": "r₁ = ρ / S",
+              "variables": [
+                {
+                  "symbol": "r₁",
+                  "meaning": "单位长度电阻",
+                  "unit": "Ω/km"
+                },
+                {
+                  "symbol": "ρ",
+                  "meaning": "计算电阻率",
+                  "unit": "Ω·mm²/km"
+                },
+                {
+                  "symbol": "S",
+                  "meaning": "导线截面积",
+                  "unit": "mm²"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "x_1 = 0.1445\\lg\\dfrac{D_m}{D_s}",
+              "display": "x₁ = 0.1445 lg(D_m / D_s)",
+              "variables": [
+                {
+                  "symbol": "x₁",
+                  "meaning": "单位长度电抗",
+                  "unit": "Ω/km"
+                },
+                {
+                  "symbol": "D_m",
+                  "meaning": "几何均距",
+                  "unit": "mm"
+                },
+                {
+                  "symbol": "D_s",
+                  "meaning": "导线自几何均距（约 0.81 r）",
+                  "unit": "mm"
+                }
+              ],
+              "conditions": "50 Hz，三相换位，非铁磁导线。"
+            },
+            {
+              "latex": "b_1 = \\dfrac{7.58}{\\lg (D_m/r)}\\times 10^{-6}",
+              "display": "b₁ = 7.58 / lg(D_m / r) × 10⁻⁶",
+              "variables": [
+                {
+                  "symbol": "b₁",
+                  "meaning": "单位长度电纳",
+                  "unit": "S/km"
+                },
+                {
+                  "symbol": "r",
+                  "meaning": "导线半径",
+                  "unit": "mm"
+                }
+              ],
+              "conditions": "50 Hz，三相换位。"
+            },
+            {
+              "latex": "D_m = \\sqrt[3]{D_{ab}D_{bc}D_{ca}}",
+              "display": "D_m = ∛(D_ab D_bc D_ca)",
+              "variables": [
+                {
+                  "symbol": "D_ab 等",
+                  "meaning": "相间距离",
+                  "unit": "mm"
+                }
+              ],
+              "conditions": ""
+            }
+          ],
+          "workedExample": {
+            "problem": "LGJ-185 导线（铝截面按 185 mm² 计，外径 19 mm），三相水平排列，相间距离 4 m。求 r₁、x₁、b₁（D_s 取 0.81r）。",
+            "steps": [
+              "r₁ = 31.5 / 185 ≈ 0.170 Ω/km。",
+              "D_m = ∛(4 × 4 × 8) m ≈ 5.04 m = 5040 mm。",
+              "r = 9.5 mm，D_s = 0.81 × 9.5 ≈ 7.70 mm，x₁ = 0.1445 lg(5040 / 7.70) ≈ 0.407 Ω/km。",
+              "b₁ = 7.58 / lg(5040 / 9.5) × 10⁻⁶ ≈ 2.78×10⁻⁶ S/km。"
+            ],
+            "answer": "r₁ ≈ 0.170 Ω/km，x₁ ≈ 0.407 Ω/km，b₁ ≈ 2.78×10⁻⁶ S/km"
+          },
+          "misconceptions": [
+            {
+              "wrong": "导线越粗电抗明显越小。",
+              "correct": "电抗只与 D_m/D_s 的对数有关，截面变化对电抗影响很小，主要影响电阻。"
+            },
+            {
+              "wrong": "电纳 b 会消耗无功。",
+              "correct": "线路电容发出无功（充电功率），在轻载时会抬高末端电压。"
+            }
+          ],
+          "visualization": {
+            "calculator": "line-parameters",
+            "params": [
+              {
+                "id": "S",
+                "label": "铝截面积",
+                "unit": "mm²",
+                "min": 35,
+                "max": 800,
+                "step": 5,
+                "default": 185
+              },
+              {
+                "id": "d",
+                "label": "导线外径",
+                "unit": "mm",
+                "min": 5,
+                "max": 40,
+                "step": 0.5,
+                "default": 19
+              },
+              {
+                "id": "D",
+                "label": "水平排列相间距离",
+                "unit": "m",
+                "min": 1,
+                "max": 15,
+                "step": 0.5,
+                "default": 4
+              }
+            ],
+            "output": "r₁、x₁、b₁ 及 D_m",
+            "assumptions": "单导线、水平排列、三相换位、D_s = 0.81r。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "相间距离从 4 m 增大到 8 m（其余不变），x₁ 大约增加多少？",
+              "answer": "约增加 0.0435 Ω/km",
+              "explanation": "D_m 翻倍，x₁ 增加 0.1445 × lg2 ≈ 0.0435 Ω/km。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "电抗公式里为什么是对数？距离翻倍时电抗会翻倍吗？",
+              "分裂导线为什么能降低电抗？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "line-pi-model",
+          "chapterId": "ch2-components",
+          "order": 2,
+          "title": "线路的 π 型等值电路",
+          "prerequisites": [
+            "line-parameters"
+          ],
+          "summary": "中等长度线路用集中参数 π 型电路表示：串联阻抗 Z = (r₁ + jx₁)l，两端各并联 B/2；短线路可忽略电纳。",
+          "explanation": "线路参数实际沿线均匀分布。长度不太大时可把参数集中：串联支路阻抗 Z = R + jX，导纳 Y = jB 平均分在两端，形成 π 型等值电路。一般 100 km 以下的架空线路（35 kV 及以下）可忽略电纳，只用串联阻抗；100~300 km 用 π 型；更长的线路需要考虑分布参数，见下一节。线路电纳发出的无功称为充电功率，近似为 Q_B = U² B，与电压平方成正比，超高压长线路轻载时可能使末端电压升高。",
+          "keyFormulas": [
+            {
+              "latex": "Z = (r_1 + jx_1)\\,l",
+              "display": "Z = (r₁ + j x₁) l",
+              "variables": [
+                {
+                  "symbol": "Z",
+                  "meaning": "串联阻抗",
+                  "unit": "Ω"
+                },
+                {
+                  "symbol": "l",
+                  "meaning": "线路长度",
+                  "unit": "km"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "\\dfrac{B}{2} = \\dfrac{b_1 l}{2}",
+              "display": "B/2 = b₁ l / 2",
+              "variables": [
+                {
+                  "symbol": "B",
+                  "meaning": "线路总电纳",
+                  "unit": "S"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "Q_B \\approx U^2 B",
+              "display": "Q_B ≈ U² B",
+              "variables": [
+                {
+                  "symbol": "Q_B",
+                  "meaning": "线路充电功率",
+                  "unit": "Mvar"
+                },
+                {
+                  "symbol": "U",
+                  "meaning": "线电压",
+                  "unit": "kV"
+                }
+              ],
+              "conditions": "两端电压都近似为 U。"
+            }
+          ],
+          "workedExample": {
+            "problem": "110 kV 线路长 100 km，r₁ = 0.17 Ω/km，x₁ = 0.41 Ω/km，b₁ = 2.8×10⁻⁶ S/km。求 π 型电路参数和额定电压下的充电功率。",
+            "steps": [
+              "Z = (0.17 + j0.41) × 100 = 17 + j41 Ω。",
+              "B = 2.8×10⁻⁴ S，两端各 B/2 = 1.4×10⁻⁴ S。",
+              "Q_B ≈ 110² × 2.8×10⁻⁴ ≈ 3.39 Mvar。"
+            ],
+            "answer": "Z = 17 + j41 Ω，B/2 = 1.4×10⁻⁴ S，Q_B ≈ 3.39 Mvar"
+          },
+          "misconceptions": [
+            {
+              "wrong": "电纳都放在线路中间。",
+              "correct": "π 型把电纳平分到两端；T 型才把导纳放在中间，电力系统计算常用 π 型。"
+            },
+            {
+              "wrong": "充电功率与负荷大小有关。",
+              "correct": "充电功率只取决于电压和电纳，与线路传输的负荷无关。"
+            }
+          ],
+          "visualization": {
+            "calculator": "line-pi",
+            "params": [
+              {
+                "id": "l",
+                "label": "线路长度",
+                "unit": "km",
+                "min": 10,
+                "max": 300,
+                "step": 5,
+                "default": 100
+              },
+              {
+                "id": "U",
+                "label": "线电压",
+                "unit": "kV",
+                "min": 35,
+                "max": 500,
+                "step": 5,
+                "default": 110
+              },
+              {
+                "id": "x1",
+                "label": "单位电抗",
+                "unit": "Ω/km",
+                "min": 0.25,
+                "max": 0.45,
+                "step": 0.01,
+                "default": 0.41
+              },
+              {
+                "id": "b1",
+                "label": "单位电纳",
+                "unit": "μS/km",
+                "min": 2.0,
+                "max": 4.5,
+                "step": 0.1,
+                "default": 2.8
+              }
+            ],
+            "output": "Z、B/2、充电功率",
+            "assumptions": "集中参数 π 型，忽略电导。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "同一线路若电压等级为 220 kV（参数近似不变），充电功率约为多少？",
+              "answer": "约 13.6 Mvar",
+              "explanation": "充电功率与电压平方成正比，4 × 3.39 ≈ 13.6 Mvar。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "什么时候可以把电纳忽略？忽略会带来什么误差？",
+              "轻载时线路末端电压为什么可能比首端还高？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "long-line",
+          "chapterId": "ch2-components",
+          "order": 3,
+          "title": "长线路的分布参数与修正",
+          "prerequisites": [
+            "line-pi-model"
+          ],
+          "summary": "超过约 300 km 的线路要用分布参数：波阻抗 Z_c 和传播常数 γ 决定线路特性，输送自然功率时沿线电压处处相等。",
+          "explanation": "分布参数线路上电压、电流满足波动方程，特征参数为波阻抗 Z_c = √(z₁/y₁) 和传播常数 γ = √(z₁y₁)。精确的 π 型等值电路为 Z' = Z_c sinh(γl)，Y'/2 = tanh(γl/2)/Z_c，也可以在集中参数基础上乘修正系数。忽略损耗时，β = √(x₁b₁)，线路末端接波阻抗负荷时传输的功率称为自然功率 P_N = U²/Z_c，此时线路电感吸收的无功恰好等于电容发出的无功，沿线电压幅值不变。传输功率大于自然功率时线路消耗无功、电压下降，小于时线路发出无功、电压升高。",
+          "keyFormulas": [
+            {
+              "latex": "Z_c = \\sqrt{\\dfrac{z_1}{y_1}},\\quad \\gamma = \\sqrt{z_1 y_1}",
+              "display": "Z_c = √(z₁/y₁)，γ = √(z₁ y₁)",
+              "variables": [
+                {
+                  "symbol": "Z_c",
+                  "meaning": "波阻抗",
+                  "unit": "Ω"
+                },
+                {
+                  "symbol": "γ",
+                  "meaning": "传播常数",
+                  "unit": "1/km"
+                },
+                {
+                  "symbol": "z₁, y₁",
+                  "meaning": "单位长度阻抗、导纳",
+                  "unit": "Ω/km, S/km"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "Z' = Z_c\\sinh(\\gamma l),\\quad \\dfrac{Y'}{2} = \\dfrac{\\tanh(\\gamma l/2)}{Z_c}",
+              "display": "Z' = Z_c sinh(γl)，Y'/2 = tanh(γl/2) / Z_c",
+              "variables": [
+                {
+                  "symbol": "Z', Y'",
+                  "meaning": "精确 π 型参数",
+                  "unit": "Ω, S"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "P_N = \\dfrac{U^2}{Z_c}",
+              "display": "P_N = U² / Z_c",
+              "variables": [
+                {
+                  "symbol": "P_N",
+                  "meaning": "自然功率",
+                  "unit": "MW"
+                },
+                {
+                  "symbol": "U",
+                  "meaning": "额定线电压",
+                  "unit": "kV"
+                }
+              ],
+              "conditions": "无损线路。"
+            }
+          ],
+          "workedExample": {
+            "problem": "500 kV 无损线路 x₁ = 0.28 Ω/km，b₁ = 4.0×10⁻⁶ S/km，长 600 km。求波阻抗、自然功率，并比较精确与集中参数的串联电抗。",
+            "steps": [
+              "Z_c = √(0.28 / 4.0×10⁻⁶) ≈ 264.6 Ω。",
+              "P_N = 500² / 264.6 ≈ 945 MW。",
+              "β = √(0.28 × 4.0×10⁻⁶) ≈ 1.058×10⁻³ rad/km，βl ≈ 0.635 rad。",
+              "精确 X' = Z_c sin(βl) ≈ 264.6 × 0.593 ≈ 156.9 Ω；集中参数 X = 0.28 × 600 = 168 Ω，误差约 7%。"
+            ],
+            "answer": "Z_c ≈ 264.6 Ω，P_N ≈ 945 MW，X' ≈ 156.9 Ω（集中参数 168 Ω）"
+          },
+          "misconceptions": [
+            {
+              "wrong": "自然功率是线路的最大输送能力。",
+              "correct": "自然功率是无功自平衡的功率，线路实际可以输送高于自然功率的功率，但要补偿无功。"
+            },
+            {
+              "wrong": "线路越长集中参数越准确。",
+              "correct": "线路越长分布效应越明显，集中参数误差越大。"
+            }
+          ],
+          "visualization": {
+            "calculator": "long-line",
+            "params": [
+              {
+                "id": "x1",
+                "label": "单位电抗",
+                "unit": "Ω/km",
+                "min": 0.25,
+                "max": 0.42,
+                "step": 0.01,
+                "default": 0.28
+              },
+              {
+                "id": "b1",
+                "label": "单位电纳",
+                "unit": "μS/km",
+                "min": 2.5,
+                "max": 4.5,
+                "step": 0.1,
+                "default": 4.0
+              },
+              {
+                "id": "l",
+                "label": "线路长度",
+                "unit": "km",
+                "min": 100,
+                "max": 1500,
+                "step": 50,
+                "default": 600
+              },
+              {
+                "id": "U",
+                "label": "额定电压",
+                "unit": "kV",
+                "min": 220,
+                "max": 1000,
+                "step": 10,
+                "default": 500
+              }
+            ],
+            "output": "Z_c、P_N、精确与集中参数对比曲线",
+            "assumptions": "无损线路。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "同一线路长度减为 300 km，精确 X' 与集中参数 X 的误差大约是多少？",
+              "answer": "约 2%",
+              "explanation": "βl ≈ 0.317，sin(βl)/(βl) ≈ 0.983，误差约 1.7%。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "如果线路末端开路，沿线电压会怎么变化？",
+              "为什么输送自然功率时线路既不吸收也不发出无功？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "line-voltage-drop",
+          "chapterId": "ch2-components",
+          "order": 4,
+          "title": "电压降落与功率损耗",
+          "prerequisites": [
+            "line-pi-model",
+            "ps-complex-power"
+          ],
+          "summary": "功率流过阻抗产生电压降落和功率损耗，电压降落纵分量主要由无功引起，横分量主要由有功引起。",
+          "explanation": "已知末端电压 U₂ 和末端功率 P + jQ 时，以 U₂ 为参考相量，首端电压 U₁ = U₂ + ΔU + jδU。纵分量 ΔU = (PR + QX)/U₂ 决定电压幅值差，横分量 δU = (PX − QR)/U₂ 决定两端相角差。高压线路 X ≫ R，所以电压幅值差主要由无功决定，相角差主要由有功决定。功率损耗 ΔS = (P² + Q²)/U² · (R + jX)，有功损耗发热，无功损耗由电抗吸收。计算时功率和电压要取同一端的值。",
+          "keyFormulas": [
+            {
+              "latex": "\\Delta U = \\dfrac{PR + QX}{U_2},\\quad \\delta U = \\dfrac{PX - QR}{U_2}",
+              "display": "ΔU = (PR + QX)/U₂，δU = (PX − QR)/U₂",
+              "variables": [
+                {
+                  "symbol": "ΔU",
+                  "meaning": "电压降落纵分量",
+                  "unit": "kV"
+                },
+                {
+                  "symbol": "δU",
+                  "meaning": "电压降落横分量",
+                  "unit": "kV"
+                },
+                {
+                  "symbol": "P, Q",
+                  "meaning": "末端流入阻抗的功率",
+                  "unit": "MW, Mvar"
+                },
+                {
+                  "symbol": "R, X",
+                  "meaning": "线路阻抗",
+                  "unit": "Ω"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "U_1 = \\sqrt{(U_2 + \\Delta U)^2 + (\\delta U)^2}",
+              "display": "U₁ = √((U₂ + ΔU)² + δU²)",
+              "variables": [
+                {
+                  "symbol": "U₁, U₂",
+                  "meaning": "首端、末端线电压",
+                  "unit": "kV"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "\\Delta \\tilde S = \\dfrac{P^2 + Q^2}{U^2}(R + jX)",
+              "display": "ΔS = (P² + Q²)/U² × (R + jX)",
+              "variables": [
+                {
+                  "symbol": "ΔS",
+                  "meaning": "阻抗中的功率损耗",
+                  "unit": "MVA"
+                }
+              ],
+              "conditions": "P、Q、U 取同一端。"
+            }
+          ],
+          "workedExample": {
+            "problem": "线路阻抗 10 + j20 Ω，末端电压 110 kV，末端功率 20 + j15 MVA（忽略电纳）。求首端电压和线路功率损耗。",
+            "steps": [
+              "ΔU = (20×10 + 15×20) / 110 ≈ 4.55 kV。",
+              "δU = (20×20 − 15×10) / 110 ≈ 2.27 kV。",
+              "U₁ = √(114.55² + 2.27²) ≈ 114.57 kV。",
+              "ΔS = (20² + 15²)/110² × (10 + j20) ≈ 0.517 + j1.033 MVA。"
+            ],
+            "answer": "U₁ ≈ 114.6 kV；ΔS ≈ 0.52 + j1.03 MVA"
+          },
+          "misconceptions": [
+            {
+              "wrong": "电压降落就是两端电压幅值之差。",
+              "correct": "电压降落是相量差 U₁ − U₂；幅值之差称为电压损耗，近似等于纵分量 ΔU。"
+            },
+            {
+              "wrong": "用首端功率配末端电压计算。",
+              "correct": "功率与电压必须取同一端，否则会引入误差。"
+            }
+          ],
+          "visualization": {
+            "calculator": "line-voltage-drop",
+            "params": [
+              {
+                "id": "P",
+                "label": "末端有功",
+                "unit": "MW",
+                "min": 0,
+                "max": 100,
+                "step": 1,
+                "default": 20
+              },
+              {
+                "id": "Q",
+                "label": "末端无功",
+                "unit": "Mvar",
+                "min": -30,
+                "max": 60,
+                "step": 1,
+                "default": 15
+              },
+              {
+                "id": "R",
+                "label": "电阻",
+                "unit": "Ω",
+                "min": 0,
+                "max": 50,
+                "step": 0.5,
+                "default": 10
+              },
+              {
+                "id": "X",
+                "label": "电抗",
+                "unit": "Ω",
+                "min": 1,
+                "max": 100,
+                "step": 0.5,
+                "default": 20
+              },
+              {
+                "id": "U2",
+                "label": "末端电压",
+                "unit": "kV",
+                "min": 10,
+                "max": 500,
+                "step": 1,
+                "default": 110
+              }
+            ],
+            "output": "首端电压相量图、ΔU、δU、功率损耗",
+            "assumptions": "忽略线路电纳，末端电压为参考相量。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "上例中若负荷改为纯有功 20 MW（Q = 0），电压损耗约为多少？",
+              "answer": "约 1.8 kV",
+              "explanation": "ΔU = 20 × 10 / 110 ≈ 1.82 kV，说明减少无功传输能明显改善电压。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "高压线路 X 比 R 大很多，那么电压幅值主要受 P 还是 Q 影响？",
+              "为什么就地无功补偿能提高末端电压？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "transformer-2w",
+          "chapterId": "ch2-components",
+          "order": 5,
+          "title": "双绕组变压器参数与等值电路",
+          "prerequisites": [
+            "ps-complex-power"
+          ],
+          "summary": "变压器参数由短路试验（ΔP_k、U_k%）和空载试验（ΔP₀、I₀%）求得，等值电路为串联阻抗加励磁导纳的 Γ 型电路。",
+          "explanation": "电力系统计算中，变压器常用 Γ 型等值电路：串联阻抗 R_T + jX_T 代表绕组电阻和漏抗，励磁支路 G_T − jB_T 放在电源侧代表铁损和励磁电流。短路试验得到短路损耗 ΔP_k（近似为额定电流下的铜损）和短路电压百分数 U_k%；空载试验得到空载损耗 ΔP₀（近似为铁损）和空载电流百分数 I₀%。参数要归算到哪一侧，公式中的 U_N 就用哪一侧的额定电压。大型变压器 R_T ≪ X_T。",
+          "keyFormulas": [
+            {
+              "latex": "R_T = \\dfrac{\\Delta P_k U_N^2}{1000\\,S_N^2}",
+              "display": "R_T = ΔP_k U_N² / (1000 S_N²)",
+              "variables": [
+                {
+                  "symbol": "R_T",
+                  "meaning": "绕组电阻",
+                  "unit": "Ω"
+                },
+                {
+                  "symbol": "ΔP_k",
+                  "meaning": "短路损耗",
+                  "unit": "kW"
+                },
+                {
+                  "symbol": "U_N",
+                  "meaning": "归算侧额定电压",
+                  "unit": "kV"
+                },
+                {
+                  "symbol": "S_N",
+                  "meaning": "额定容量",
+                  "unit": "MVA"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "X_T = \\dfrac{U_k\\%\\,U_N^2}{100\\,S_N}",
+              "display": "X_T = U_k% U_N² / (100 S_N)",
+              "variables": [
+                {
+                  "symbol": "X_T",
+                  "meaning": "漏抗",
+                  "unit": "Ω"
+                },
+                {
+                  "symbol": "U_k%",
+                  "meaning": "短路电压百分数",
+                  "unit": "%"
+                }
+              ],
+              "conditions": "近似认为 Z_T ≈ X_T。"
+            },
+            {
+              "latex": "G_T = \\dfrac{\\Delta P_0}{1000\\,U_N^2},\\quad B_T = \\dfrac{I_0\\%\\,S_N}{100\\,U_N^2}",
+              "display": "G_T = ΔP₀ / (1000 U_N²)，B_T = I₀% S_N / (100 U_N²)",
+              "variables": [
+                {
+                  "symbol": "G_T",
+                  "meaning": "励磁电导",
+                  "unit": "S"
+                },
+                {
+                  "symbol": "B_T",
+                  "meaning": "励磁电纳",
+                  "unit": "S"
+                },
+                {
+                  "symbol": "ΔP₀",
+                  "meaning": "空载损耗",
+                  "unit": "kW"
+                },
+                {
+                  "symbol": "I₀%",
+                  "meaning": "空载电流百分数",
+                  "unit": "%"
+                }
+              ],
+              "conditions": ""
+            }
+          ],
+          "workedExample": {
+            "problem": "SFL1-31500/110 变压器，110/11 kV，ΔP_k = 148 kW，U_k% = 10.5，ΔP₀ = 38.5 kW，I₀% = 0.8。求归算到 110 kV 侧的参数。",
+            "steps": [
+              "R_T = 148 × 110² / (1000 × 31.5²) ≈ 1.80 Ω。",
+              "X_T = 10.5 × 110² / (100 × 31.5) ≈ 40.3 Ω。",
+              "G_T = 38.5 / (1000 × 110²) ≈ 3.18×10⁻⁶ S。",
+              "B_T = 0.8 × 31.5 / (100 × 110²) ≈ 2.08×10⁻⁵ S。"
+            ],
+            "answer": "R_T ≈ 1.80 Ω，X_T ≈ 40.3 Ω，G_T ≈ 3.18×10⁻⁶ S，B_T ≈ 2.08×10⁻⁵ S"
+          },
+          "misconceptions": [
+            {
+              "wrong": "参数归算到低压侧时公式里仍用高压侧电压。",
+              "correct": "归算到哪侧就用哪侧额定电压；归算到 11 kV 侧时阻抗缩小 100 倍。"
+            },
+            {
+              "wrong": "变压器励磁支路发出无功。",
+              "correct": "励磁支路吸收感性无功，符号为 G_T − jB_T。"
+            }
+          ],
+          "visualization": {
+            "calculator": "transformer-params",
+            "params": [
+              {
+                "id": "SN",
+                "label": "额定容量",
+                "unit": "MVA",
+                "min": 1,
+                "max": 1000,
+                "step": 0.5,
+                "default": 31.5
+              },
+              {
+                "id": "UN",
+                "label": "归算侧额定电压",
+                "unit": "kV",
+                "min": 6,
+                "max": 500,
+                "step": 0.5,
+                "default": 110
+              },
+              {
+                "id": "Pk",
+                "label": "短路损耗",
+                "unit": "kW",
+                "min": 10,
+                "max": 2000,
+                "step": 1,
+                "default": 148
+              },
+              {
+                "id": "Uk",
+                "label": "短路电压百分数",
+                "unit": "%",
+                "min": 4,
+                "max": 20,
+                "step": 0.1,
+                "default": 10.5
+              },
+              {
+                "id": "P0",
+                "label": "空载损耗",
+                "unit": "kW",
+                "min": 1,
+                "max": 500,
+                "step": 0.5,
+                "default": 38.5
+              },
+              {
+                "id": "I0",
+                "label": "空载电流百分数",
+                "unit": "%",
+                "min": 0.1,
+                "max": 3,
+                "step": 0.05,
+                "default": 0.8
+              }
+            ],
+            "output": "R_T、X_T、G_T、B_T",
+            "assumptions": "Γ 型等值电路，Z_T ≈ X_T。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "把上例 X_T 归算到 11 kV 侧，结果是多少？",
+              "answer": "约 0.403 Ω",
+              "explanation": "X_T = 10.5 × 11² / (100 × 31.5) ≈ 0.403 Ω，等于高压侧值除以变比平方 100。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "短路试验时为什么可以忽略励磁支路？空载试验时为什么可以忽略绕组阻抗？",
+              "U_k% 越大，对短路电流和电压降落分别有什么影响？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "transformer-3w",
+          "chapterId": "ch2-components",
+          "order": 6,
+          "title": "三绕组变压器参数",
+          "prerequisites": [
+            "transformer-2w"
+          ],
+          "summary": "三绕组变压器用星形等值电路，各绕组电抗由两两短路试验的 U_k% 联立求出，中间绕组电抗可能接近零甚至为负。",
+          "explanation": "三绕组变压器的等值电路是三个绕组阻抗 Z₁、Z₂、Z₃ 接成星形，再加励磁支路。厂家给出三组两两短路试验数据 U_k(1-2)%、U_k(1-3)%、U_k(2-3)%，每组等于对应两个绕组电抗之和，联立即可解出各绕组的值。电阻同理由三组短路损耗求得（容量不等时要先把短路损耗折算到额定容量）。排列在中间的绕组与两侧绕组耦合紧密，其等值电抗很小，有时为负值，这只是等值计算的结果，不代表绕组本身有负电抗。",
+          "keyFormulas": [
+            {
+              "latex": "U_{k1}\\% = \\tfrac{1}{2}\\left(U_{k(1\\text{-}2)}\\% + U_{k(1\\text{-}3)}\\% - U_{k(2\\text{-}3)}\\%\\right)",
+              "display": "U_k1% = (U_k12% + U_k13% − U_k23%) / 2",
+              "variables": [
+                {
+                  "symbol": "U_k1%",
+                  "meaning": "绕组 1 等值短路电压",
+                  "unit": "%"
+                },
+                {
+                  "symbol": "U_k12% 等",
+                  "meaning": "两两短路试验短路电压",
+                  "unit": "%"
+                }
+              ],
+              "conditions": "U_k2%、U_k3% 依此类推轮换下标。"
+            },
+            {
+              "latex": "X_{Ti} = \\dfrac{U_{ki}\\%\\,U_N^2}{100\\,S_N}",
+              "display": "X_Ti = U_ki% U_N² / (100 S_N)",
+              "variables": [
+                {
+                  "symbol": "X_Ti",
+                  "meaning": "绕组 i 电抗",
+                  "unit": "Ω"
+                }
+              ],
+              "conditions": ""
+            }
+          ],
+          "workedExample": {
+            "problem": "三绕组变压器 U_k(1-2)% = 10.5，U_k(1-3)% = 17，U_k(2-3)% = 6。求各绕组等值短路电压百分数。",
+            "steps": [
+              "U_k1% = (10.5 + 17 − 6) / 2 = 10.75。",
+              "U_k2% = (10.5 + 6 − 17) / 2 = −0.25。",
+              "U_k3% = (17 + 6 − 10.5) / 2 = 6.25。",
+              "绕组 2 的等值值为负，说明它是排在中间的绕组。"
+            ],
+            "answer": "U_k1% = 10.75，U_k2% = −0.25，U_k3% = 6.25"
+          },
+          "misconceptions": [
+            {
+              "wrong": "等值电抗为负说明数据错了。",
+              "correct": "中间绕组等值电抗为小负值是正常现象，计算时照常代入或近似取零。"
+            },
+            {
+              "wrong": "三绕组变压器可以用三个双绕组变压器代替。",
+              "correct": "三绕组之间相互耦合，必须用联立求解得到的星形电路，不能简单拆分。"
+            }
+          ],
+          "visualization": null,
+          "images": [],
+          "practice": [
+            {
+              "question": "若 U_k(1-2)% = 17，U_k(1-3)% = 10.5，U_k(2-3)% = 6，哪一个绕组排在中间？",
+              "answer": "绕组 3",
+              "explanation": "此时 U_k3% = (10.5 + 6 − 17)/2 = −0.25，最小者为中间绕组。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "两两短路试验时第三个绕组处于什么状态？",
+              "为什么排在中间的绕组等值电抗最小？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "transformer-off-nominal",
+          "chapterId": "ch2-components",
+          "order": 7,
+          "title": "非标准变比变压器的 π 型等值电路",
+          "prerequisites": [
+            "transformer-2w",
+            "per-unit"
+          ],
+          "summary": "变压器实际变比与基准电压之比不等于 1 时，可用不对称 π 型电路表示，便于直接写入节点导纳矩阵。",
+          "explanation": "标幺制下，若变压器变比恰好等于两侧基准电压之比，变压器只剩一个串联阻抗；但调整分接头或采用平均电压作基准后，标幺变比 k ≠ 1。把理想变压器 k:1 和阻抗 Z_T（归算到理想变压器的 1 侧之外，即 j 侧）合并，得到 π 型电路：串联支路 y_T/k，i 侧并联 y_T(1 − k)/k²，j 侧并联 y_T(k − 1)/k，其中 y_T = 1/Z_T。k > 1 时一侧并联支路呈容性、另一侧呈感性，这两个支路不对应真实元件，仅用于等值计算。",
+          "keyFormulas": [
+            {
+              "latex": "y_{ij}' = \\dfrac{y_T}{k},\\ \\ y_{i0} = \\dfrac{(1-k)\\,y_T}{k^2},\\ \\ y_{j0} = \\dfrac{(k-1)\\,y_T}{k}",
+              "display": "串联 y_T/k，i 侧并联 (1 − k) y_T / k²，j 侧并联 (k − 1) y_T / k",
+              "variables": [
+                {
+                  "symbol": "y_T",
+                  "meaning": "变压器漏抗导纳 1/Z_T",
+                  "unit": "pu"
+                },
+                {
+                  "symbol": "k",
+                  "meaning": "标幺变比（i 侧 : j 侧）",
+                  "unit": "—"
+                }
+              ],
+              "conditions": "理想变压器在 i 侧，Z_T 在 j 侧；忽略励磁支路。"
+            }
+          ],
+          "workedExample": {
+            "problem": "标幺参数 Z_T = j0.1，k = 1.05。求 π 型电路三个支路的导纳。",
+            "steps": [
+              "y_T = 1 / j0.1 = −j10。",
+              "串联支路 y_T / k = −j10 / 1.05 ≈ −j9.524。",
+              "i 侧并联 (1 − 1.05) × (−j10) / 1.05² ≈ +j0.454（容性）。",
+              "j 侧并联 (1.05 − 1) × (−j10) / 1.05 ≈ −j0.476（感性）。"
+            ],
+            "answer": "串联 −j9.524，i 侧 +j0.454，j 侧 −j0.476"
+          },
+          "misconceptions": [
+            {
+              "wrong": "π 型电路两侧并联支路是变压器励磁支路。",
+              "correct": "它们由变比不等于 1 产生，不是励磁支路，励磁支路要另外计入。"
+            },
+            {
+              "wrong": "k 写成 j 侧 : i 侧也能直接套公式。",
+              "correct": "公式与理想变压器所在一侧和 k 的定义对应，换定义必须重新推导。"
+            }
+          ],
+          "visualization": {
+            "calculator": "off-nominal-pi",
+            "params": [
+              {
+                "id": "XT",
+                "label": "变压器标幺电抗",
+                "unit": "pu",
+                "min": 0.03,
+                "max": 0.3,
+                "step": 0.005,
+                "default": 0.1
+              },
+              {
+                "id": "k",
+                "label": "标幺变比",
+                "unit": "—",
+                "min": 0.9,
+                "max": 1.1,
+                "step": 0.0125,
+                "default": 1.05
+              }
+            ],
+            "output": "π 型三支路导纳",
+            "assumptions": "忽略电阻和励磁支路。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "k = 1 时 π 型电路退化成什么？",
+              "answer": "只剩串联阻抗 Z_T，两侧并联支路为零。",
+              "explanation": "代入 k = 1，两侧并联导纳均为零。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "理想变压器两侧电流和电压是什么关系？试着从节点电流方程推一遍。",
+              "调分接头相当于改变了哪个参数？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "generator-model",
+          "chapterId": "ch2-components",
+          "order": 8,
+          "title": "同步发电机稳态模型与功角特性",
+          "prerequisites": [
+            "ps-complex-power",
+            "per-unit"
+          ],
+          "summary": "隐极发电机稳态可用电势 E_q 串同步电抗 X_d 表示，输出功率 P = E_q U sinδ / X_d，δ 为功角。",
+          "explanation": "隐极同步发电机稳态等值电路为空载电势 E_q 串联同步电抗 X_d（忽略定子电阻），端电压 U = E_q − jX_d I。发电机向无限大母线输出的有功 P = E_q U sinδ / X_d，δ 为 E_q 超前 U 的角度，称为功角。δ = 90° 时达到功率极限。凸极机 X_d ≠ X_q，多一项磁阻功率 U²(1/X_q − 1/X_d) sin2δ / 2。发电机运行还受定子电流、转子电流、原动机出力和静稳定极限限制，构成 P-Q 运行极限图。暂态和次暂态模型见短路一章。",
+          "keyFormulas": [
+            {
+              "latex": "\\dot E_q = \\dot U + jX_d\\dot I",
+              "display": "E_q = U + j X_d I",
+              "variables": [
+                {
+                  "symbol": "E_q",
+                  "meaning": "空载电势",
+                  "unit": "pu"
+                },
+                {
+                  "symbol": "U",
+                  "meaning": "端电压",
+                  "unit": "pu"
+                },
+                {
+                  "symbol": "X_d",
+                  "meaning": "直轴同步电抗",
+                  "unit": "pu"
+                },
+                {
+                  "symbol": "I",
+                  "meaning": "定子电流",
+                  "unit": "pu"
+                }
+              ],
+              "conditions": "隐极机，忽略电阻。"
+            },
+            {
+              "latex": "P = \\dfrac{E_q U}{X_d}\\sin\\delta",
+              "display": "P = E_q U sinδ / X_d",
+              "variables": [
+                {
+                  "symbol": "P",
+                  "meaning": "电磁功率",
+                  "unit": "pu"
+                },
+                {
+                  "symbol": "δ",
+                  "meaning": "功角",
+                  "unit": "°"
+                }
+              ],
+              "conditions": "隐极机。"
+            }
+          ],
+          "workedExample": {
+            "problem": "隐极发电机 X_d = 1.2，端电压 1.0，输出有功 0.8、功率因数 0.85（滞后）。求 E_q、功角和功率极限（标幺值）。",
+            "steps": [
+              "I = 0.8 / 0.85 ≈ 0.941，滞后电压 arccos0.85 ≈ 31.8°。",
+              "E_q = 1 + j1.2 × 0.941∠−31.8° ≈ 1.595 + j0.960。",
+              "|E_q| ≈ 1.862，δ ≈ 31.0°。",
+              "功率极限 P_max = 1.862 × 1 / 1.2 ≈ 1.55。"
+            ],
+            "answer": "E_q ≈ 1.86，δ ≈ 31.0°，P_max ≈ 1.55"
+          },
+          "misconceptions": [
+            {
+              "wrong": "功角是电压与电流的夹角。",
+              "correct": "功角是电势 E_q 与端电压（或系统电压）的夹角；电压与电流的夹角是功率因数角。"
+            },
+            {
+              "wrong": "增大励磁会增加有功输出。",
+              "correct": "稳态有功由原动机决定；增大励磁主要增加无功输出，并提高功率极限。"
+            }
+          ],
+          "visualization": {
+            "calculator": "power-angle",
+            "params": [
+              {
+                "id": "Eq",
+                "label": "空载电势",
+                "unit": "pu",
+                "min": 0.8,
+                "max": 2.5,
+                "step": 0.01,
+                "default": 1.86
+              },
+              {
+                "id": "U",
+                "label": "系统电压",
+                "unit": "pu",
+                "min": 0.8,
+                "max": 1.1,
+                "step": 0.01,
+                "default": 1.0
+              },
+              {
+                "id": "Xd",
+                "label": "同步电抗",
+                "unit": "pu",
+                "min": 0.5,
+                "max": 2.5,
+                "step": 0.05,
+                "default": 1.2
+              },
+              {
+                "id": "Xq",
+                "label": "交轴同步电抗（凸极）",
+                "unit": "pu",
+                "min": 0.4,
+                "max": 2.5,
+                "step": 0.05,
+                "default": 1.2
+              }
+            ],
+            "output": "P-δ 功角曲线与运行点",
+            "assumptions": "单机无限大系统，忽略电阻；X_q = X_d 时为隐极机。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "上例若保持 P = 0.8 而把 E_q 提高到 2.0，功角变为多少？",
+              "answer": "约 28.7°",
+              "explanation": "sinδ = 0.8 × 1.2 / 2.0 = 0.48，δ ≈ 28.7°。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "功角超过 90° 后再增加原动机功率，会发生什么？",
+              "增大励磁时功角是变大还是变小？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "load-model",
+          "chapterId": "ch2-components",
+          "order": 9,
+          "title": "负荷的静态模型",
+          "prerequisites": [
+            "ps-complex-power",
+            "ps-load-curve"
+          ],
+          "summary": "负荷功率随电压、频率变化，常用恒功率、恒电流、恒阻抗及其组合（ZIP 模型）描述。",
+          "explanation": "负荷的静态特性描述稳态下负荷功率与电压、频率的关系。恒阻抗负荷（如电阻炉）功率与电压平方成正比，恒电流负荷与电压成正比，恒功率负荷（如电力电子调节的负荷）不随电压变化。综合负荷常用 ZIP 模型 P = P₀[a(U/U₀)² + b(U/U₀) + c]，a + b + c = 1；无功同理。频率特性常用负荷调节效应系数 K_L* 表示，频率下降 1% 有功负荷约下降 K_L*%，一般 K_L* 在 1~3 之间。潮流计算中负荷常按恒功率处理，电压稳定和暂态分析时负荷模型对结果影响很大。",
+          "keyFormulas": [
+            {
+              "latex": "P = P_0\\left[a\\left(\\dfrac{U}{U_0}\\right)^2 + b\\,\\dfrac{U}{U_0} + c\\right]",
+              "display": "P = P₀ [a (U/U₀)² + b (U/U₀) + c]",
+              "variables": [
+                {
+                  "symbol": "P₀",
+                  "meaning": "额定电压下负荷功率",
+                  "unit": "MW"
+                },
+                {
+                  "symbol": "a, b, c",
+                  "meaning": "恒阻抗、恒电流、恒功率比例，和为 1",
+                  "unit": "—"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "\\Delta P_{L*} = K_{L*}\\,\\Delta f_*",
+              "display": "ΔP_L* = K_L* Δf*",
+              "variables": [
+                {
+                  "symbol": "K_L*",
+                  "meaning": "负荷频率调节效应系数",
+                  "unit": "—"
+                },
+                {
+                  "symbol": "Δf*",
+                  "meaning": "频率变化标幺值",
+                  "unit": "—"
+                }
+              ],
+              "conditions": ""
+            }
+          ],
+          "workedExample": {
+            "problem": "某负荷额定电压下 10 MW。电压降到 0.95 时，按恒阻抗模型和 ZIP 模型（a = 0.3，b = 0.3，c = 0.4）分别求负荷功率。",
+            "steps": [
+              "恒阻抗：P = 10 × 0.95² ≈ 9.03 MW。",
+              "ZIP：P = 10 × (0.3 × 0.9025 + 0.3 × 0.95 + 0.4) ≈ 9.56 MW。"
+            ],
+            "answer": "恒阻抗 9.03 MW；ZIP 9.56 MW"
+          },
+          "misconceptions": [
+            {
+              "wrong": "负荷功率是固定值，与电压无关。",
+              "correct": "只有恒功率负荷与电压无关，大部分实际负荷随电压降低而减小。"
+            },
+            {
+              "wrong": "恒功率负荷对电压稳定最有利。",
+              "correct": "恒功率负荷在电压下降时电流增大，加剧电压下降，对电压稳定最不利。"
+            }
+          ],
+          "visualization": {
+            "calculator": "zip-load",
+            "params": [
+              {
+                "id": "P0",
+                "label": "额定功率",
+                "unit": "MW",
+                "min": 1,
+                "max": 100,
+                "step": 1,
+                "default": 10
+              },
+              {
+                "id": "a",
+                "label": "恒阻抗比例",
+                "unit": "—",
+                "min": 0,
+                "max": 1,
+                "step": 0.05,
+                "default": 0.3
+              },
+              {
+                "id": "b",
+                "label": "恒电流比例",
+                "unit": "—",
+                "min": 0,
+                "max": 1,
+                "step": 0.05,
+                "default": 0.3
+              },
+              {
+                "id": "U",
+                "label": "电压标幺值",
+                "unit": "pu",
+                "min": 0.7,
+                "max": 1.1,
+                "step": 0.01,
+                "default": 0.95
+              }
+            ],
+            "output": "P-U 曲线对比",
+            "assumptions": "c = 1 − a − b，不能为负。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "恒电流负荷 10 MW，电压降到 0.9 时功率是多少？",
+              "answer": "9 MW",
+              "explanation": "恒电流负荷功率与电压成正比。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "电压降低时，恒功率负荷的电流怎么变？这对网络有什么影响？",
+              "为什么潮流计算里常把负荷当恒功率？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "per-unit",
+          "chapterId": "ch2-components",
+          "order": 10,
+          "title": "标幺制",
+          "prerequisites": [
+            "ps-complex-power"
+          ],
+          "summary": "标幺值 = 有名值 / 基准值。选定三相基准容量 S_B 和线电压基准 U_B 后，电流、阻抗基准随之确定，换基准时阻抗按公式折算。",
+          "explanation": "标幺制用相对值表示物理量，简化计算并便于比较不同容量的设备。三相系统中通常选三相基准容量 S_B（常取 100 MVA）和线电压基准 U_B，则 I_B = S_B / (√3 U_B)，Z_B = U_B² / S_B。用线电压和三相功率作基准时，线电压与相电压的标幺值相等，三相功率与单相功率的标幺值也相等，公式中不再出现 √3。设备铭牌参数通常是以自身额定容量和额定电压为基准的标幺值（或百分数），参与系统计算前要换算到统一基准。",
+          "keyFormulas": [
+            {
+              "latex": "I_B = \\dfrac{S_B}{\\sqrt 3\\,U_B},\\quad Z_B = \\dfrac{U_B^2}{S_B}",
+              "display": "I_B = S_B / (√3 U_B)，Z_B = U_B² / S_B",
+              "variables": [
+                {
+                  "symbol": "S_B",
+                  "meaning": "三相基准容量",
+                  "unit": "MVA"
+                },
+                {
+                  "symbol": "U_B",
+                  "meaning": "线电压基准",
+                  "unit": "kV"
+                },
+                {
+                  "symbol": "I_B",
+                  "meaning": "电流基准",
+                  "unit": "kA"
+                },
+                {
+                  "symbol": "Z_B",
+                  "meaning": "阻抗基准",
+                  "unit": "Ω"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "Z_{*(B)} = Z_{*(N)}\\,\\dfrac{S_B}{S_N}\\left(\\dfrac{U_N}{U_B}\\right)^2",
+              "display": "Z*(B) = Z*(N) × (S_B / S_N) × (U_N / U_B)²",
+              "variables": [
+                {
+                  "symbol": "Z*(N)",
+                  "meaning": "以额定值为基准的标幺阻抗",
+                  "unit": "pu"
+                },
+                {
+                  "symbol": "Z*(B)",
+                  "meaning": "统一基准下的标幺阻抗",
+                  "unit": "pu"
+                },
+                {
+                  "symbol": "S_N, U_N",
+                  "meaning": "设备额定容量、额定电压",
+                  "unit": "MVA, kV"
+                }
+              ],
+              "conditions": ""
+            }
+          ],
+          "workedExample": {
+            "problem": "发电机 50 MVA、10.5 kV，X''_d = 0.125（以额定值为基准）。取 S_B = 100 MVA、U_B = 10.5 kV，求统一基准下的 X''_d 及其有名值。",
+            "steps": [
+              "电压基准与额定电压相同，只需换容量：X''_d = 0.125 × 100 / 50 = 0.25。",
+              "Z_B = 10.5² / 100 = 1.1025 Ω。",
+              "有名值 X''_d = 0.25 × 1.1025 ≈ 0.276 Ω（也可由 0.125 × 10.5² / 50 验证）。"
+            ],
+            "answer": "X''_d = 0.25（100 MVA 基准），约 0.276 Ω"
+          },
+          "misconceptions": [
+            {
+              "wrong": "用相电压作基准时也可以直接用 S_B/(√3U_B)。",
+              "correct": "必须明确基准是线电压加三相容量，还是相电压加单相容量，两者不能混用。"
+            },
+            {
+              "wrong": "标幺阻抗与基准无关。",
+              "correct": "标幺阻抗与基准容量成正比、与基准电压平方成反比，换基准必须折算。"
+            }
+          ],
+          "visualization": {
+            "calculator": "per-unit-convert",
+            "params": [
+              {
+                "id": "Z",
+                "label": "原标幺阻抗",
+                "unit": "pu",
+                "min": 0.01,
+                "max": 2,
+                "step": 0.005,
+                "default": 0.125
+              },
+              {
+                "id": "SN",
+                "label": "原基准容量",
+                "unit": "MVA",
+                "min": 1,
+                "max": 1000,
+                "step": 1,
+                "default": 50
+              },
+              {
+                "id": "UN",
+                "label": "原基准电压",
+                "unit": "kV",
+                "min": 0.4,
+                "max": 500,
+                "step": 0.1,
+                "default": 10.5
+              },
+              {
+                "id": "SB",
+                "label": "新基准容量",
+                "unit": "MVA",
+                "min": 1,
+                "max": 1000,
+                "step": 1,
+                "default": 100
+              },
+              {
+                "id": "UB",
+                "label": "新基准电压",
+                "unit": "kV",
+                "min": 0.4,
+                "max": 500,
+                "step": 0.1,
+                "default": 10.5
+              }
+            ],
+            "output": "新基准标幺值与有名值",
+            "assumptions": "三相基准容量、线电压基准。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "一台变压器 U_k% = 10.5，额定 31.5 MVA，换算到 100 MVA 基准（电压基准等于额定电压）后电抗标幺值是多少？",
+              "answer": "约 0.333",
+              "explanation": "0.105 × 100 / 31.5 ≈ 0.333。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "为什么选线电压和三相容量作基准后，公式里的 √3 不见了？",
+              "同一台设备，基准容量越大，它的标幺阻抗越大还是越小？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "per-unit-network",
+          "chapterId": "ch2-components",
+          "order": 11,
+          "title": "多电压等级网络的标幺参数归算",
+          "prerequisites": [
+            "per-unit",
+            "transformer-2w",
+            "ps-voltage-levels"
+          ],
+          "summary": "多电压等级网络要按变压器变比确定各段基准电压：精确计算用实际变比，近似计算统一用平均额定电压。",
+          "explanation": "网络中各电压等级的基准电压不能任意选：选定某一段的基准电压后，其他段按变压器变比逐级推算，这样变压器在标幺制中变比为 1。这是精确计算法，变比用实际额定变比。短路实用计算常用近似法：各段基准电压直接取该段平均额定电压（10.5、37、115、230 kV 等），忽略变压器实际变比与平均电压之比的差异，计算简便，误差一般可以接受。两种方法得到的线路标幺阻抗不同，计算前要说明采用哪种方法。",
+          "keyFormulas": [
+            {
+              "latex": "U_{B(II)} = U_{B(I)}\\,\\dfrac{U_{N(II)}}{U_{N(I)}}",
+              "display": "U_B(II) = U_B(I) × U_N(II) / U_N(I)",
+              "variables": [
+                {
+                  "symbol": "U_B(I), U_B(II)",
+                  "meaning": "变压器两侧基准电压",
+                  "unit": "kV"
+                },
+                {
+                  "symbol": "U_N(I), U_N(II)",
+                  "meaning": "变压器两侧额定电压",
+                  "unit": "kV"
+                }
+              ],
+              "conditions": "精确计算。"
+            },
+            {
+              "latex": "Z_* = Z\\,\\dfrac{S_B}{U_{av}^2}",
+              "display": "Z* = Z × S_B / U_av²",
+              "variables": [
+                {
+                  "symbol": "U_av",
+                  "meaning": "所在段平均额定电压",
+                  "unit": "kV"
+                }
+              ],
+              "conditions": "近似计算。"
+            }
+          ],
+          "workedExample": {
+            "problem": "10.5 kV 发电机经 10.5/121 kV 变压器接一条 110 kV、100 km、x₁ = 0.4 Ω/km 的线路。S_B = 100 MVA，分别用精确法（发电机侧 U_B = 10.5 kV）和近似法求线路电抗标幺值。",
+            "steps": [
+              "线路电抗 X = 0.4 × 100 = 40 Ω。",
+              "精确法：线路段 U_B = 10.5 × 121 / 10.5 = 121 kV，X* = 40 × 100 / 121² ≈ 0.273。",
+              "近似法：U_B = 115 kV，X* = 40 × 100 / 115² ≈ 0.302。"
+            ],
+            "answer": "精确法 0.273；近似法 0.302"
+          },
+          "misconceptions": [
+            {
+              "wrong": "各段都取额定电压作基准就是精确法。",
+              "correct": "精确法要求各段基准按变压器实际变比推算，额定电压 110 kV 与变比推出的 121 kV 不同。"
+            },
+            {
+              "wrong": "近似法与精确法的结果一样。",
+              "correct": "两者有差别，近似法用于短路实用计算，潮流计算一般用精确法或非标准变比模型。"
+            }
+          ],
+          "visualization": null,
+          "images": [],
+          "practice": [
+            {
+              "question": "上例若变压器变比改为 10.5/115 kV，精确法线路标幺电抗是多少？",
+              "answer": "约 0.302",
+              "explanation": "此时线路段 U_B = 115 kV，与近似法一致。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "为什么基准电压要跟着变压器变比走？",
+              "近似法的误差来自哪里？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "dq-transform",
+          "chapterId": "ch2-components",
+          "order": 12,
+          "title": "同步电机的 dq0 变换",
+          "prerequisites": [
+            "generator-model",
+            "ps-complex-power"
+          ],
+          "summary": "dq0 变换把定子三相量投影到随转子旋转的 d、q 轴上，使电感参数变成常数。本课程采用幅值不变、q 轴超前 d 轴 90° 的约定。",
+          "explanation": "同步电机定子绕组的自感和互感随转子位置变化，直接用 abc 量分析很复杂。派克变换把三相量投影到随转子旋转的直轴 d 和交轴 q 上，再加零轴分量。本课程采用幅值不变约定：系数取 2/3，d 轴分量用 cos 投影，q 轴分量用负 sin 投影（q 轴超前 d 轴 90°）。按此约定，三相对称正弦量变换后 i_d + j i_q 为常数，等于转子坐标下的相量，幅值等于相电流幅值。另有功率不变约定（系数 √(2/3)），两种约定下功率表达式不同，不能混用。",
+          "keyFormulas": [
+            {
+              "latex": "\\begin{bmatrix} f_d\\\\ f_q\\\\ f_0\\end{bmatrix} = \\dfrac{2}{3}\\begin{bmatrix}\\cos\\theta & \\cos(\\theta-120^\\circ) & \\cos(\\theta+120^\\circ)\\\\ -\\sin\\theta & -\\sin(\\theta-120^\\circ) & -\\sin(\\theta+120^\\circ)\\\\ \\tfrac12 & \\tfrac12 & \\tfrac12\\end{bmatrix}\\begin{bmatrix} f_a\\\\ f_b\\\\ f_c\\end{bmatrix}",
+              "display": "f_d = (2/3)[f_a cosθ + f_b cos(θ−120°) + f_c cos(θ+120°)]；f_q = −(2/3)[f_a sinθ + f_b sin(θ−120°) + f_c sin(θ+120°)]；f_0 = (f_a + f_b + f_c)/3",
+              "variables": [
+                {
+                  "symbol": "θ",
+                  "meaning": "d 轴超前 a 相轴线的电角度",
+                  "unit": "rad"
+                },
+                {
+                  "symbol": "f_d, f_q, f_0",
+                  "meaning": "直轴、交轴、零轴分量",
+                  "unit": "与原量同单位"
+                }
+              ],
+              "conditions": "幅值不变约定，q 轴超前 d 轴 90°。"
+            },
+            {
+              "latex": "P = \\tfrac32\\,(u_d i_d + u_q i_q) + 3u_0 i_0",
+              "display": "P = (3/2)(u_d i_d + u_q i_q) + 3 u₀ i₀",
+              "variables": [
+                {
+                  "symbol": "P",
+                  "meaning": "三相瞬时功率",
+                  "unit": "W"
+                }
+              ],
+              "conditions": "幅值不变约定下有 3/2 系数。"
+            }
+          ],
+          "workedExample": {
+            "problem": "三相对称电流 i_a = 100 cos(ωt − 30°) A，转子角 θ = ωt。求 i_d、i_q、i_0。",
+            "steps": [
+              "对称三相量零轴分量 i_0 = 0。",
+              "按本约定，i_d + j i_q = I_m e^{j(φ − θ₀)}，φ = −30°，θ₀ = 0。",
+              "i_d = 100 cos(−30°) ≈ 86.6 A，i_q = 100 sin(−30°) = −50 A，二者都是常数。"
+            ],
+            "answer": "i_d ≈ 86.6 A，i_q = −50 A，i_0 = 0"
+          },
+          "misconceptions": [
+            {
+              "wrong": "不同教材的 dq 公式可以随便混用。",
+              "correct": "系数（2/3 或 √(2/3)）和 q 轴方向（超前或滞后 d 轴）不同会改变符号和功率公式，必须全程统一。"
+            },
+            {
+              "wrong": "dq 分量是交流量。",
+              "correct": "三相对称稳态下 dq 分量是直流常数，这正是变换的目的。"
+            }
+          ],
+          "visualization": {
+            "calculator": "dq-transform",
+            "params": [
+              {
+                "id": "Im",
+                "label": "电流幅值",
+                "unit": "A",
+                "min": 1,
+                "max": 200,
+                "step": 1,
+                "default": 100
+              },
+              {
+                "id": "phi",
+                "label": "电流初相",
+                "unit": "°",
+                "min": -180,
+                "max": 180,
+                "step": 1,
+                "default": -30
+              },
+              {
+                "id": "theta0",
+                "label": "转子初始角",
+                "unit": "°",
+                "min": -180,
+                "max": 180,
+                "step": 1,
+                "default": 0
+              }
+            ],
+            "output": "abc 波形与 dq 分量随时间变化",
+            "assumptions": "三相对称正弦电流，幅值不变约定、q 轴超前 d 轴 90°。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "同上，若 i_a = 100 cos(ωt + 60°) A，i_q 是多少？",
+              "answer": "约 86.6 A",
+              "explanation": "φ = 60°，i_q = 100 sin60° ≈ 86.6 A，i_d = 50 A。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "为什么在转子坐标里看，对称三相电流变成了常数？",
+              "零轴分量在什么情况下不为零？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        }
+      ]
+    },
+    {
+      "id": "ch3-power-flow",
+      "order": 3,
+      "title": "从网络模型到潮流",
+      "description": "导纳矩阵、开式网络潮流、牛顿法、P-Q 分解法、直流潮流与调频调压。",
+      "concepts": [
+        {
+          "id": "admittance-matrix",
+          "chapterId": "ch3-power-flow",
+          "order": 1,
+          "title": "节点导纳矩阵的形成与修改",
+          "prerequisites": [
+            "line-pi-model",
+            "transformer-off-nominal",
+            "per-unit"
+          ],
+          "summary": "节点导纳矩阵 Y 描述网络结构：对角元是与节点相连的全部导纳之和，非对角元是两节点间支路导纳的负值。",
+          "explanation": "以大地为参考节点列写节点电压方程 I = Y U，I 为节点注入电流，U 为节点电压。自导纳 Y_ii 等于节点 i 所连全部支路导纳之和（包括线路 π 型两端的 jB/2、变压器 π 型并联支路等对地支路）；互导纳 Y_ij 等于节点 i、j 间支路导纳的负值，无直接联系时为零。因此 Y 是对称（不含移相器时）、高度稀疏的矩阵，实际电网中每行非零元只有几个。网络结构变化时不必重建：增加或切除一条支路，只需修改与该支路两端相关的四个元素。",
+          "keyFormulas": [
+            {
+              "latex": "Y_{ii} = \\sum_{j} y_{ij} + y_{i0},\\quad Y_{ij} = -y_{ij}",
+              "display": "Y_ii = Σ y_ij + y_i0，Y_ij = −y_ij",
+              "variables": [
+                {
+                  "symbol": "y_ij",
+                  "meaning": "节点 i、j 间支路导纳",
+                  "unit": "pu"
+                },
+                {
+                  "symbol": "y_i0",
+                  "meaning": "节点 i 对地导纳之和",
+                  "unit": "pu"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "\\mathbf I = \\mathbf Y\\,\\mathbf U",
+              "display": "I = Y U",
+              "variables": [
+                {
+                  "symbol": "I",
+                  "meaning": "节点注入电流列向量",
+                  "unit": "pu"
+                },
+                {
+                  "symbol": "U",
+                  "meaning": "节点电压列向量",
+                  "unit": "pu"
+                }
+              ],
+              "conditions": ""
+            }
+          ],
+          "workedExample": {
+            "problem": "三节点网络，支路电抗 x₁₂ = 0.1、x₁₃ = 0.2、x₂₃ = 0.25（标幺值，忽略电阻和对地支路）。写出 Y 矩阵；若切除支路 2-3，Y 如何修改？",
+            "steps": [
+              "支路导纳 y₁₂ = −j10，y₁₃ = −j5，y₂₃ = −j4。",
+              "Y₁₁ = −j15，Y₂₂ = −j14，Y₃₃ = −j9；Y₁₂ = j10，Y₁₃ = j5，Y₂₃ = j4。",
+              "切除 2-3：Y₂₂、Y₃₃ 各加 j4（变为 −j10、−j5），Y₂₃ 改为 0。"
+            ],
+            "answer": "Y = [[−j15, j10, j5], [j10, −j14, j4], [j5, j4, −j9]]；切除后 Y₂₂ = −j10，Y₃₃ = −j5，Y₂₃ = 0"
+          },
+          "misconceptions": [
+            {
+              "wrong": "互导纳等于支路导纳。",
+              "correct": "互导纳是支路导纳的负值。"
+            },
+            {
+              "wrong": "对地电容不计入导纳矩阵。",
+              "correct": "线路两端 jB/2 等对地支路要计入对应节点的自导纳。"
+            }
+          ],
+          "visualization": {
+            "calculator": "ybus-builder",
+            "params": [
+              {
+                "id": "x12",
+                "label": "支路 1-2 电抗",
+                "unit": "pu",
+                "min": 0.02,
+                "max": 1,
+                "step": 0.01,
+                "default": 0.1
+              },
+              {
+                "id": "x13",
+                "label": "支路 1-3 电抗",
+                "unit": "pu",
+                "min": 0.02,
+                "max": 1,
+                "step": 0.01,
+                "default": 0.2
+              },
+              {
+                "id": "x23",
+                "label": "支路 2-3 电抗",
+                "unit": "pu",
+                "min": 0.02,
+                "max": 1,
+                "step": 0.01,
+                "default": 0.25
+              }
+            ],
+            "output": "Y 矩阵各元素",
+            "assumptions": "三节点、纯电抗、无对地支路。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "在上例节点 1、2 之间再并联一条 x = 0.1 的线路，哪些元素改变？",
+              "answer": "Y₁₁ 变为 −j25，Y₂₂ 变为 −j24，Y₁₂ 变为 j20。",
+              "explanation": "增加支路只影响两端节点的两个自导纳和一对互导纳。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "为什么实际电网的导纳矩阵大部分元素是零？",
+              "切除一条线路，需要改哪几个元素？为什么？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "radial-power-flow",
+          "chapterId": "ch3-power-flow",
+          "order": 2,
+          "title": "开式网络的潮流计算",
+          "prerequisites": [
+            "line-voltage-drop"
+          ],
+          "summary": "辐射状网络已知末端功率和首端电压时，先由末端向首端推算功率损耗，再由首端向末端推算电压，必要时迭代。",
+          "explanation": "配电网和简单输电网多为开式（辐射状）网络。实际问题常给出末端负荷功率和首端（电源）电压，两端条件不在同一端，无法一次算出。实用方法分两步：第一步假设全网电压为额定电压，从末端向首端逐段计算功率损耗，得到各段首端功率；第二步用已知首端电压和算出的功率，从首端向末端逐段计算电压降落。精度不够时用新电压重复两步，这就是前推回代法，配电网潮流广泛采用。",
+          "keyFormulas": [
+            {
+              "latex": "\\tilde S_1 = \\tilde S_2 + \\dfrac{P_2^2+Q_2^2}{U_N^2}(R+jX)",
+              "display": "S₁ = S₂ + (P₂² + Q₂²)/U_N² × (R + jX)",
+              "variables": [
+                {
+                  "symbol": "S₁, S₂",
+                  "meaning": "支路首端、末端功率",
+                  "unit": "MVA"
+                },
+                {
+                  "symbol": "U_N",
+                  "meaning": "额定电压（第一步近似）",
+                  "unit": "kV"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "U_2 = \\sqrt{\\left(U_1 - \\dfrac{P_1R + Q_1X}{U_1}\\right)^2 + \\left(\\dfrac{P_1X - Q_1R}{U_1}\\right)^2}",
+              "display": "U₂ = √((U₁ − (P₁R + Q₁X)/U₁)² + ((P₁X − Q₁R)/U₁)²)",
+              "variables": [
+                {
+                  "symbol": "U₁",
+                  "meaning": "已知首端电压",
+                  "unit": "kV"
+                },
+                {
+                  "symbol": "P₁, Q₁",
+                  "meaning": "首端功率",
+                  "unit": "MW, Mvar"
+                }
+              ],
+              "conditions": ""
+            }
+          ],
+          "workedExample": {
+            "problem": "110 kV 线路阻抗 10 + j20 Ω，末端负荷 20 + j15 MVA，首端电压 116 kV（忽略电纳）。求末端电压。",
+            "steps": [
+              "第一步按 110 kV 算损耗：ΔS ≈ (20² + 15²)/110² × (10 + j20) ≈ 0.517 + j1.033 MVA，首端功率 S₁ ≈ 20.517 + j16.033 MVA。",
+              "第二步：ΔU = (20.517 × 10 + 16.033 × 20) / 116 ≈ 4.53 kV，δU = (20.517 × 20 − 16.033 × 10) / 116 ≈ 2.16 kV。",
+              "U₂ = √((116 − 4.53)² + 2.16²) ≈ 111.5 kV。"
+            ],
+            "answer": "末端电压约 111.5 kV"
+          },
+          "misconceptions": [
+            {
+              "wrong": "必须先知道末端电压才能计算。",
+              "correct": "用额定电压代替未知电压先算损耗，再回代求电压，误差通常很小。"
+            },
+            {
+              "wrong": "第二步可以用末端功率配首端电压。",
+              "correct": "由首端推电压时，要用首端功率和首端电压。"
+            }
+          ],
+          "visualization": {
+            "calculator": "radial-two-step",
+            "params": [
+              {
+                "id": "P",
+                "label": "末端有功",
+                "unit": "MW",
+                "min": 0,
+                "max": 60,
+                "step": 1,
+                "default": 20
+              },
+              {
+                "id": "Q",
+                "label": "末端无功",
+                "unit": "Mvar",
+                "min": -20,
+                "max": 40,
+                "step": 1,
+                "default": 15
+              },
+              {
+                "id": "R",
+                "label": "电阻",
+                "unit": "Ω",
+                "min": 0,
+                "max": 40,
+                "step": 0.5,
+                "default": 10
+              },
+              {
+                "id": "X",
+                "label": "电抗",
+                "unit": "Ω",
+                "min": 1,
+                "max": 80,
+                "step": 0.5,
+                "default": 20
+              },
+              {
+                "id": "U1",
+                "label": "首端电压",
+                "unit": "kV",
+                "min": 100,
+                "max": 125,
+                "step": 0.5,
+                "default": 116
+              }
+            ],
+            "output": "首端功率、末端电压",
+            "assumptions": "单段线路，忽略电纳，额定电压 110 kV 用于第一步。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "上例若首端电压降为 113 kV，末端电压大约是多少？",
+              "answer": "约 108.4 kV",
+              "explanation": "近似按同样功率计算：ΔU ≈ 525.8/113 ≈ 4.65 kV，δU ≈ 2.21 kV，U₂ ≈ 108.4 kV（功率损耗略有变化，教学近似）。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "为什么第一步可以先用额定电压？这样误差大吗？",
+              "如果网络有多段串联和分支，推算顺序是怎样的？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "power-flow-equations",
+          "chapterId": "ch3-power-flow",
+          "order": 3,
+          "title": "潮流方程与节点类型",
+          "prerequisites": [
+            "admittance-matrix"
+          ],
+          "summary": "每个节点有 P、Q、U、θ 四个量，已知两个求两个；按已知量分为 PQ 节点、PV 节点和一个平衡节点。",
+          "explanation": "把 I = YU 代入 S = UI*，得到节点功率方程：P_i、Q_i 是各节点电压幅值和相角的非线性函数。每个节点有四个变量，必须给定两个：PQ 节点给定注入有功和无功（大多数负荷节点），PV 节点给定有功和电压幅值（有调压能力的发电厂），平衡节点（Vθ 节点）给定电压幅值和相角（通常 θ = 0 作为参考），其功率待求，用来平衡全网损耗。潮流计算要求解 n − 1 个有功方程和 PQ 节点个数个无功方程。PV 节点无功越限时要转为 PQ 节点。",
+          "keyFormulas": [
+            {
+              "latex": "P_i = U_i\\sum_{j=1}^{n}U_j\\left(G_{ij}\\cos\\theta_{ij} + B_{ij}\\sin\\theta_{ij}\\right)",
+              "display": "P_i = U_i Σ U_j (G_ij cosθ_ij + B_ij sinθ_ij)",
+              "variables": [
+                {
+                  "symbol": "P_i",
+                  "meaning": "节点 i 注入有功",
+                  "unit": "pu"
+                },
+                {
+                  "symbol": "G_ij + jB_ij",
+                  "meaning": "导纳矩阵元素 Y_ij",
+                  "unit": "pu"
+                },
+                {
+                  "symbol": "θ_ij",
+                  "meaning": "θ_i − θ_j",
+                  "unit": "rad"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "Q_i = U_i\\sum_{j=1}^{n}U_j\\left(G_{ij}\\sin\\theta_{ij} - B_{ij}\\cos\\theta_{ij}\\right)",
+              "display": "Q_i = U_i Σ U_j (G_ij sinθ_ij − B_ij cosθ_ij)",
+              "variables": [
+                {
+                  "symbol": "Q_i",
+                  "meaning": "节点 i 注入无功",
+                  "unit": "pu"
+                }
+              ],
+              "conditions": ""
+            }
+          ],
+          "workedExample": {
+            "problem": "某 10 节点系统有 1 个平衡节点、3 个 PV 节点、6 个 PQ 节点。潮流计算有多少个未知量和方程？",
+            "steps": [
+              "未知相角：除平衡节点外 9 个；未知电压幅值：6 个 PQ 节点。",
+              "有功方程 9 个（除平衡节点），无功方程 6 个（PQ 节点）。",
+              "共 15 个未知量、15 个方程。"
+            ],
+            "answer": "15 个未知量、15 个方程"
+          },
+          "misconceptions": [
+            {
+              "wrong": "每个发电机节点都是 PV 节点。",
+              "correct": "发电机节点无功受限，越限时要转为 PQ 节点；出力固定且不调压的小电源也可按 PQ 处理。"
+            },
+            {
+              "wrong": "平衡节点的功率是给定的。",
+              "correct": "平衡节点功率是计算结果，用于平衡网损。"
+            }
+          ],
+          "visualization": null,
+          "images": [],
+          "practice": [
+            {
+              "question": "若上例中有一个 PV 节点无功越上限，方程数变为多少？",
+              "answer": "16 个",
+              "explanation": "该节点转为 PQ，增加一个电压幅值未知量和一个无功方程。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "为什么全网必须有一个平衡节点？网损事先知道吗？",
+              "PV 节点为什么不列无功方程？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "newton-raphson",
+          "chapterId": "ch3-power-flow",
+          "order": 4,
+          "title": "牛顿-拉夫逊法潮流计算",
+          "prerequisites": [
+            "power-flow-equations"
+          ],
+          "summary": "牛顿法把非线性潮流方程在当前点线性化，用雅可比矩阵求修正量，具有平方收敛特性，通常 3~5 次迭代即可收敛。",
+          "explanation": "潮流方程写成功率不平衡量 ΔP_i = P_i,给定 − P_i(U, θ)、ΔQ_i = Q_i,给定 − Q_i(U, θ)。牛顿法每次迭代求解线性方程 [ΔP; ΔQ] = J [Δθ; ΔU]，J 为雅可比矩阵（各功率对 θ、U 的偏导数），然后修正 θ 和 U，直到不平衡量小于允许误差。初值常取平启动：U = 1、θ = 0。牛顿法靠近解时收敛很快（误差平方递减），但每次迭代都要重新形成并分解雅可比矩阵。雅可比矩阵与导纳矩阵结构相同，也是稀疏的。",
+          "keyFormulas": [
+            {
+              "latex": "\\begin{bmatrix}\\Delta\\mathbf P\\\\ \\Delta\\mathbf Q\\end{bmatrix} = \\begin{bmatrix}\\mathbf H & \\mathbf N\\\\ \\mathbf M & \\mathbf L\\end{bmatrix}\\begin{bmatrix}\\Delta\\boldsymbol\\theta\\\\ \\Delta\\mathbf U\\end{bmatrix}",
+              "display": "[ΔP; ΔQ] = [H N; M L] [Δθ; ΔU]",
+              "variables": [
+                {
+                  "symbol": "H, N, M, L",
+                  "meaning": "∂P/∂θ、∂P/∂U、∂Q/∂θ、∂Q/∂U 子矩阵",
+                  "unit": "—"
+                }
+              ],
+              "conditions": "也常用 ΔU/U 作修正量。"
+            }
+          ],
+          "workedExample": {
+            "problem": "两节点系统：节点 1 平衡节点 U = 1∠0；线路 x = 0.1（无损）；节点 2 负荷 P = 0.5、Q = 0（标幺值）。用牛顿法平启动迭代。",
+            "steps": [
+              "节点 2 方程：P₂ = 10U₂ sinθ₂ = −0.5，Q₂ = −10U₂ cosθ₂ + 10U₂² = 0。",
+              "第 1 次：ΔP = −0.5，ΔQ = 0，J = [[10, 0], [0, 10]]，得 θ₂ = −0.05，U₂ = 1.0。",
+              "第 2 次：ΔP ≈ −2.1×10⁻⁴，ΔQ ≈ −0.0125，修正后 θ₂ ≈ −0.050084，U₂ ≈ 0.998748。",
+              "第 3 次后不平衡量约 10⁻¹¹，收敛到 θ₂ ≈ −0.050084 rad（−2.87°），U₂ ≈ 0.99875。"
+            ],
+            "answer": "θ₂ ≈ −2.87°，U₂ ≈ 0.9987，3 次迭代收敛"
+          },
+          "misconceptions": [
+            {
+              "wrong": "牛顿法从任何初值都能收敛。",
+              "correct": "初值离解太远时可能发散；平启动在正常运行方式下一般可行。"
+            },
+            {
+              "wrong": "雅可比矩阵只需在开始时形成一次。",
+              "correct": "标准牛顿法每次迭代都要更新雅可比矩阵，这正是它计算量大的原因。"
+            }
+          ],
+          "visualization": {
+            "calculator": "nr-two-bus",
+            "params": [
+              {
+                "id": "P",
+                "label": "负荷有功",
+                "unit": "pu",
+                "min": 0,
+                "max": 4,
+                "step": 0.05,
+                "default": 0.5
+              },
+              {
+                "id": "Q",
+                "label": "负荷无功",
+                "unit": "pu",
+                "min": -1,
+                "max": 2,
+                "step": 0.05,
+                "default": 0
+              },
+              {
+                "id": "X",
+                "label": "线路电抗",
+                "unit": "pu",
+                "min": 0.05,
+                "max": 0.5,
+                "step": 0.01,
+                "default": 0.1
+              }
+            ],
+            "output": "每次迭代的 θ₂、U₂ 与不平衡量收敛曲线",
+            "assumptions": "两节点、无损线路、平启动；负荷过大时无解，用于展示不收敛。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "上例负荷改为 P = 0.5、Q = 0.2，收敛后 U₂ 会更高还是更低？",
+              "answer": "更低",
+              "explanation": "节点 2 吸收无功会增加线路上的电压降落，U₂ 下降。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "牛顿法的“线性化”具体是指什么？画一个一元函数的切线试试。",
+              "为什么越接近解，收敛越快？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "pq-decoupled",
+          "chapterId": "ch3-power-flow",
+          "order": 5,
+          "title": "P-Q 分解法",
+          "prerequisites": [
+            "newton-raphson"
+          ],
+          "summary": "利用高压电网 R ≪ X、相角差小的特点，把有功-相角和无功-电压解耦，并用常数矩阵代替雅可比矩阵，每次迭代计算量大大减小。",
+          "explanation": "高压电网中有功主要与相角有关，无功主要与电压幅值有关，因此可以忽略雅可比矩阵中的 N、M 子矩阵。再假设 cosθ_ij ≈ 1、G_ij sinθ_ij ≪ B_ij、U_i²B_ii ≫ Q_i，H 和 L 可以用只由网络参数决定的常数矩阵 B' 和 B'' 代替。于是有功、无功两组修正方程交替求解，系数矩阵在迭代中不变，只需分解一次。P-Q 分解法收敛是线性的，迭代次数比牛顿法多，但每次迭代快得多，总计算速度更快。R/X 较大的配电网中可能收敛困难。",
+          "keyFormulas": [
+            {
+              "latex": "\\dfrac{\\Delta\\mathbf P}{\\mathbf U} = \\mathbf B'\\,\\Delta\\boldsymbol\\theta",
+              "display": "ΔP / U = B' Δθ",
+              "variables": [
+                {
+                  "symbol": "B'",
+                  "meaning": "有功修正系数矩阵（取 1/x）",
+                  "unit": "pu"
+                }
+              ],
+              "conditions": "电压近似取 1 后的常见简化形式。"
+            },
+            {
+              "latex": "\\dfrac{\\Delta\\mathbf Q}{\\mathbf U} = \\mathbf B''\\,\\Delta\\mathbf U",
+              "display": "ΔQ / U = B'' ΔU",
+              "variables": [
+                {
+                  "symbol": "B''",
+                  "meaning": "无功修正系数矩阵（取 −B_ij）",
+                  "unit": "pu"
+                }
+              ],
+              "conditions": ""
+            }
+          ],
+          "workedExample": {
+            "problem": "用 P-Q 分解法解“牛顿-拉夫逊法”一节的两节点系统（B' = B'' = 10），与牛顿法对比收敛速度。",
+            "steps": [
+              "第 1 次：Δθ = −0.5 / 10 = −0.05；再算 ΔQ ≈ −0.0125，ΔU ≈ −0.00125，U₂ ≈ 0.99875。",
+              "第 2 次后 ΔP 约 −8×10⁻⁴，第 3 次约 −3×10⁻⁶，第 4 次约 −1×10⁻⁸。",
+              "收敛到与牛顿法相同的解（θ₂ ≈ −0.050084，U₂ ≈ 0.99875），达到 10⁻⁸ 精度需 4 次左右，牛顿法 3 次。"
+            ],
+            "answer": "结果与牛顿法相同；迭代次数略多，但每次只用常数矩阵"
+          },
+          "misconceptions": [
+            {
+              "wrong": "P-Q 分解法结果精度比牛顿法低。",
+              "correct": "简化只影响修正方向，不平衡量仍用精确方程计算，收敛后结果与牛顿法相同。"
+            },
+            {
+              "wrong": "P-Q 分解法适用于所有电网。",
+              "correct": "R/X 较大的配电网中解耦假设不成立，可能收敛慢或不收敛。"
+            }
+          ],
+          "visualization": null,
+          "images": [],
+          "practice": [
+            {
+              "question": "为什么 P-Q 分解法的系数矩阵只需分解一次？",
+              "answer": "B' 和 B'' 只由网络参数决定，迭代中不变。",
+              "explanation": "牛顿法的雅可比矩阵随 U、θ 变化，每次都要重新形成和分解。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "高压电网里有功主要影响什么量？无功呢？这和“电压降落”那一节有什么联系？",
+              "用常数矩阵代替雅可比矩阵，为什么最终结果仍然准确？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "dc-power-flow",
+          "chapterId": "ch3-power-flow",
+          "order": 6,
+          "title": "直流潮流",
+          "prerequisites": [
+            "power-flow-equations"
+          ],
+          "summary": "直流潮流假设电压幅值全为 1、忽略电阻和无功，把有功潮流化为线性方程 P = B θ，用于规划和安全分析中的快速估算。",
+          "explanation": "在 P-Q 分解法的基础上进一步假设：各节点电压幅值都为 1，线路电阻忽略，相角差很小（sinθ ≈ θ），不计无功。这样支路有功 P_ij = (θ_i − θ_j)/x_ij，节点有功 P = Bθ，是线性方程组，一次求解即可，无需迭代。直流潮流只能算有功分布，不能算电压和无功，常用于电网规划、N−1 安全分析和电力市场。注意：这里的“直流”指方程形式像直流电路，与城市轨道交通的直流牵引供电系统无关。",
+          "keyFormulas": [
+            {
+              "latex": "P_{ij} = \\dfrac{\\theta_i - \\theta_j}{x_{ij}}",
+              "display": "P_ij = (θ_i − θ_j) / x_ij",
+              "variables": [
+                {
+                  "symbol": "P_ij",
+                  "meaning": "支路有功潮流",
+                  "unit": "pu"
+                },
+                {
+                  "symbol": "x_ij",
+                  "meaning": "支路电抗",
+                  "unit": "pu"
+                },
+                {
+                  "symbol": "θ",
+                  "meaning": "节点相角",
+                  "unit": "rad"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "\\mathbf P = \\mathbf B\\,\\boldsymbol\\theta",
+              "display": "P = B θ",
+              "variables": [
+                {
+                  "symbol": "B",
+                  "meaning": "以 1/x 形成的节点电纳矩阵（去掉平衡节点）",
+                  "unit": "pu"
+                }
+              ],
+              "conditions": ""
+            }
+          ],
+          "workedExample": {
+            "problem": "三节点网络 x₁₂ = 0.1、x₁₃ = 0.2、x₂₃ = 0.25；节点 1 为平衡节点（θ = 0），节点 2 发电 1.0，节点 3 负荷 1.5（标幺值）。用直流潮流求各支路潮流。",
+            "steps": [
+              "B（去掉节点 1）= [[14, −4], [−4, 9]]，P = [1.0, −1.5]。",
+              "解得 θ₂ = 3/110 ≈ 0.0273，θ₃ = −17/110 ≈ −0.1545 rad。",
+              "P₁₂ = (0 − 0.0273)/0.1 ≈ −0.273（即 0.273 从 2 流向 1），P₁₃ ≈ 0.773，P₂₃ ≈ 0.727。",
+              "校核：节点 3 流入 0.773 + 0.727 = 1.5，平衡节点出力 0.5。"
+            ],
+            "answer": "P₂→₁ ≈ 0.273，P₁₃ ≈ 0.773，P₂₃ ≈ 0.727（标幺值）"
+          },
+          "misconceptions": [
+            {
+              "wrong": "直流潮流就是直流输电或直流牵引网的潮流。",
+              "correct": "直流潮流是交流电网有功潮流的线性近似，与直流输电、直流牵引网计算是不同问题。"
+            },
+            {
+              "wrong": "直流潮流也能看电压是否越限。",
+              "correct": "直流潮流假设电压全为 1，不能分析电压和无功问题。"
+            }
+          ],
+          "visualization": {
+            "calculator": "dc-flow-3bus",
+            "params": [
+              {
+                "id": "P2",
+                "label": "节点 2 注入",
+                "unit": "pu",
+                "min": -2,
+                "max": 2,
+                "step": 0.05,
+                "default": 1.0
+              },
+              {
+                "id": "P3",
+                "label": "节点 3 注入",
+                "unit": "pu",
+                "min": -2,
+                "max": 2,
+                "step": 0.05,
+                "default": -1.5
+              },
+              {
+                "id": "x12",
+                "label": "x12",
+                "unit": "pu",
+                "min": 0.05,
+                "max": 0.5,
+                "step": 0.01,
+                "default": 0.1
+              },
+              {
+                "id": "x13",
+                "label": "x13",
+                "unit": "pu",
+                "min": 0.05,
+                "max": 0.5,
+                "step": 0.01,
+                "default": 0.2
+              },
+              {
+                "id": "x23",
+                "label": "x23",
+                "unit": "pu",
+                "min": 0.05,
+                "max": 0.5,
+                "step": 0.01,
+                "default": 0.25
+              }
+            ],
+            "output": "各节点相角与支路潮流箭头",
+            "assumptions": "直流潮流假设，节点 1 为平衡节点。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "上例若切除支路 1-2，P₁₃ 和 P₂₃ 变为多少？",
+              "answer": "P₂₃ = 1.0，P₁₃ = 0.5",
+              "explanation": "辐射网中潮流由功率平衡直接决定：节点 2 发出的 1.0 全部经 2-3 送出，节点 3 还缺 0.5 由节点 1 供给。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "支路潮流和相角差是什么关系？这和功角特性有什么相似之处？",
+              "直流潮流丢掉了哪些信息？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "frequency-voltage-control",
+          "chapterId": "ch3-power-flow",
+          "order": 7,
+          "title": "频率调整与电压调整",
+          "prerequisites": [
+            "power-flow-equations",
+            "load-model",
+            "generator-model"
+          ],
+          "summary": "有功不平衡引起频率变化，由发电机调速器（一次调频）和调频厂（二次调频）调整；电压由无功平衡决定，靠励磁、分接头和无功补偿调整。",
+          "explanation": "负荷增加时，发电机调速器自动增加出力，负荷本身也随频率下降而减少，两者共同作用使频率稳定在略低的新值，这是一次调频，属有差调节。系统单位调节功率 K = K_G + K_L，频率偏差 Δf = −ΔP_L0 / K。二次调频由调频器平移发电机静特性，增发功率 ΔP_G0，可使频率恢复或接近额定值，即 Δf = −(ΔP_L0 − ΔP_G0)/K。电压调整主要手段有：改变发电机励磁、改变变压器分接头（不能增加无功，只改变无功分布）、并联电容器和调相机等无功补偿、串联电容改变线路参数。调压方式有逆调压、顺调压和常调压，按负荷特点选择。",
+          "keyFormulas": [
+            {
+              "latex": "\\Delta f = -\\dfrac{\\Delta P_{L0} - \\Delta P_{G0}}{K_G + K_L}",
+              "display": "Δf = −(ΔP_L0 − ΔP_G0) / (K_G + K_L)",
+              "variables": [
+                {
+                  "symbol": "ΔP_L0",
+                  "meaning": "负荷增量",
+                  "unit": "MW"
+                },
+                {
+                  "symbol": "ΔP_G0",
+                  "meaning": "二次调频增发功率（一次调频时为 0）",
+                  "unit": "MW"
+                },
+                {
+                  "symbol": "K_G, K_L",
+                  "meaning": "发电机、负荷单位调节功率",
+                  "unit": "MW/Hz"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "K_L = K_{L*}\\,\\dfrac{P_L}{f_N}",
+              "display": "K_L = K_L* P_L / f_N",
+              "variables": [
+                {
+                  "symbol": "K_L*",
+                  "meaning": "负荷调节效应系数",
+                  "unit": "—"
+                },
+                {
+                  "symbol": "P_L",
+                  "meaning": "系统负荷",
+                  "unit": "MW"
+                }
+              ],
+              "conditions": ""
+            }
+          ],
+          "workedExample": {
+            "problem": "系统负荷 3000 MW，K_L* = 1.5，发电机单位调节功率 K_G = 600 MW/Hz。负荷突增 100 MW，求只有一次调频和二次调频增发 60 MW 时的频率变化。",
+            "steps": [
+              "K_L = 1.5 × 3000 / 50 = 90 MW/Hz，K = 600 + 90 = 690 MW/Hz。",
+              "一次调频：Δf = −100 / 690 ≈ −0.145 Hz。",
+              "二次调频增发 60 MW：Δf = −(100 − 60)/690 ≈ −0.058 Hz。"
+            ],
+            "answer": "一次调频 −0.145 Hz；二次调频后 −0.058 Hz"
+          },
+          "misconceptions": [
+            {
+              "wrong": "一次调频能让频率回到 50 Hz。",
+              "correct": "一次调频是有差调节，频率只能稳定在偏低的新值，无差调节靠二次调频。"
+            },
+            {
+              "wrong": "调变压器分接头能解决系统无功不足。",
+              "correct": "分接头只改变无功分布，系统无功不足时必须增加无功电源。"
+            }
+          ],
+          "visualization": {
+            "calculator": "frequency-response",
+            "params": [
+              {
+                "id": "dPL",
+                "label": "负荷增量",
+                "unit": "MW",
+                "min": 0,
+                "max": 500,
+                "step": 5,
+                "default": 100
+              },
+              {
+                "id": "dPG",
+                "label": "二次调频增发",
+                "unit": "MW",
+                "min": 0,
+                "max": 500,
+                "step": 5,
+                "default": 0
+              },
+              {
+                "id": "KG",
+                "label": "发电机单位调节功率",
+                "unit": "MW/Hz",
+                "min": 0,
+                "max": 3000,
+                "step": 10,
+                "default": 600
+              },
+              {
+                "id": "KLs",
+                "label": "负荷调节效应系数",
+                "unit": "—",
+                "min": 0,
+                "max": 3,
+                "step": 0.1,
+                "default": 1.5
+              },
+              {
+                "id": "PL",
+                "label": "系统负荷",
+                "unit": "MW",
+                "min": 100,
+                "max": 10000,
+                "step": 100,
+                "default": 3000
+              }
+            ],
+            "output": "发电机与负荷静特性交点、频率偏差",
+            "assumptions": "稳态分析，不考虑动态过程。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "若发电机已满载（K_G = 0），负荷突增 100 MW 时频率变化多少？",
+              "answer": "约 −1.11 Hz",
+              "explanation": "只剩负荷调节效应，Δf = −100/90 ≈ −1.11 Hz，说明保留旋转备用的重要性。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "负荷增加后，是谁在第一时间补上了功率缺额？",
+              "为什么调压可以分区就地进行，调频却要全网协调？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        }
+      ]
+    },
+    {
+      "id": "ch4-faults",
+      "order": 4,
+      "title": "从故障到序网络",
+      "description": "三相短路暂态与实用计算、对称分量法、序网络与不对称故障。",
+      "concepts": [
+        {
+          "id": "fault-types",
+          "chapterId": "ch4-faults",
+          "order": 1,
+          "title": "短路故障的类型、原因与危害",
+          "prerequisites": [
+            "ps-neutral-grounding"
+          ],
+          "summary": "短路分三相短路、两相短路、单相接地短路和两相接地短路四种，三相短路是对称故障，其余为不对称故障；单相接地最常见。",
+          "explanation": "短路是相与相或相与地之间非正常的低阻抗连接，常见原因有绝缘老化或损坏、雷击过电压、鸟兽跨接、误操作等。四种基本类型：三相短路 f⁽³⁾、两相短路 f⁽²⁾、单相接地短路 f⁽¹⁾、两相接地短路 f⁽¹·¹⁾。三相短路后三相仍对称，可以只算一相；其余三种三相不对称，要用对称分量法。运行统计中单相接地短路占大多数，三相短路最少，但三相短路电流通常最大，常用来校验设备。短路的危害包括：大电流的热效应和电动力损坏设备；电压骤降影响用户；可能破坏系统稳定；不对称短路的零序电流对通信线路产生干扰。短路计算用于选择和校验电气设备、整定继电保护、选择限流措施等。",
+          "keyFormulas": [
+            {
+              "latex": "f^{(3)},\\ f^{(2)},\\ f^{(1)},\\ f^{(1,1)}",
+              "display": "f(3)、f(2)、f(1)、f(1,1)",
+              "variables": [
+                {
+                  "symbol": "f(n)",
+                  "meaning": "短路类型符号，上标表示短路相数或接地方式",
+                  "unit": "—"
+                }
+              ],
+              "conditions": ""
+            }
+          ],
+          "workedExample": {
+            "problem": "判断：(1) 哪些短路类型有零序电流？(2) 中性点不接地系统发生单相接地，属于这一章讲的短路吗？",
+            "steps": [
+              "零序电流需要经大地（或中性线）形成回路，只有接地类故障才可能有：单相接地短路和两相接地短路，且要求系统中性点接地。",
+              "中性点不接地系统单相接地没有低阻抗回路，只有电容电流，不构成短路（见“中性点接地方式”）。"
+            ],
+            "answer": "(1) 单相接地短路和两相接地短路（中性点接地系统）；(2) 不属于短路"
+          },
+          "misconceptions": [
+            {
+              "wrong": "三相短路最常见。",
+              "correct": "单相接地短路最常见，三相短路最少，但后果通常最严重。"
+            },
+            {
+              "wrong": "短路电流越大越好，保护容易动作。",
+              "correct": "短路电流过大会超出设备的热稳定、动稳定和断路器开断能力，常需限流。"
+            }
+          ],
+          "visualization": null,
+          "images": [],
+          "practice": [
+            {
+              "question": "为什么设备选择通常用三相短路电流校验？",
+              "answer": "三相短路电流在多数情况下最大，且计算最简单。",
+              "explanation": "某些接地点附近零序阻抗很小时单相接地电流可能更大，需另行校核（见“单相接地短路”）。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "你觉得为什么单相接地故障最多？",
+              "对称故障和不对称故障在计算上的根本区别是什么？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "infinite-bus-short-circuit",
+          "chapterId": "ch4-faults",
+          "order": 2,
+          "title": "无限大功率电源供电的三相短路暂态",
+          "prerequisites": [
+            "fault-types",
+            "per-unit"
+          ],
+          "summary": "无限大电源供电时，短路电流由稳态周期分量和按时间常数衰减的非周期分量组成，最大瞬时值称为冲击电流，约在短路后半个周期出现。",
+          "explanation": "无限大功率电源指电压幅值和频率都恒定的电源，内阻抗为零，是实际中电源容量远大于短路回路容量时的近似。短路后回路电流不能突变，电流由两部分组成：周期分量（稳态短路电流，幅值 I_pm 不变）和非周期分量（直流分量，以时间常数 T_a = L/R 衰减）。非周期分量初值与短路瞬间电压相位有关，空载且合闸角使周期分量初值最大时，短路电流最大瞬时值最大，称为冲击电流，约在短路后 0.01 s（半个周期）出现。冲击电流用于校验设备动稳定，冲击电流有效值用于校验断路器开断能力。",
+          "keyFormulas": [
+            {
+              "latex": "i_M = k_M\\sqrt{2}\\,I_p",
+              "display": "i_M = k_M √2 I_p",
+              "variables": [
+                {
+                  "symbol": "i_M",
+                  "meaning": "冲击电流",
+                  "unit": "kA"
+                },
+                {
+                  "symbol": "k_M",
+                  "meaning": "冲击系数",
+                  "unit": "—"
+                },
+                {
+                  "symbol": "I_p",
+                  "meaning": "周期分量有效值",
+                  "unit": "kA"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "k_M = 1 + e^{-0.01/T_a}",
+              "display": "k_M = 1 + e^(−0.01/T_a)",
+              "variables": [
+                {
+                  "symbol": "T_a",
+                  "meaning": "非周期分量衰减时间常数",
+                  "unit": "s"
+                }
+              ],
+              "conditions": "实用计算常取 k_M = 1.8，即 i_M ≈ 2.55 I_p。"
+            },
+            {
+              "latex": "I_M = I_p\\sqrt{1 + 2(k_M - 1)^2}",
+              "display": "I_M = I_p √(1 + 2(k_M − 1)²)",
+              "variables": [
+                {
+                  "symbol": "I_M",
+                  "meaning": "冲击电流有效值",
+                  "unit": "kA"
+                }
+              ],
+              "conditions": ""
+            }
+          ],
+          "workedExample": {
+            "problem": "无限大电源供电，短路电流周期分量有效值 10 kA，冲击系数取 1.8。求冲击电流和冲击电流有效值。",
+            "steps": [
+              "i_M = 1.8 × √2 × 10 ≈ 25.5 kA。",
+              "I_M = 10 × √(1 + 2 × 0.8²) = 10 × √2.28 ≈ 15.1 kA。"
+            ],
+            "answer": "i_M ≈ 25.5 kA，I_M ≈ 15.1 kA"
+          },
+          "misconceptions": [
+            {
+              "wrong": "无限大电源短路电流无穷大。",
+              "correct": "“无限大”指电源电压恒定，短路电流仍由回路阻抗限制，是有限值。"
+            },
+            {
+              "wrong": "每次短路都会出现冲击电流那么大的峰值。",
+              "correct": "冲击电流是最严重合闸相位下的最大值，实际短路瞬间不一定是最严重情况。"
+            }
+          ],
+          "visualization": {
+            "calculator": "short-circuit-waveform",
+            "params": [
+              {
+                "id": "Ip",
+                "label": "周期分量有效值",
+                "unit": "kA",
+                "min": 1,
+                "max": 50,
+                "step": 0.5,
+                "default": 10
+              },
+              {
+                "id": "Ta",
+                "label": "时间常数",
+                "unit": "ms",
+                "min": 5,
+                "max": 200,
+                "step": 5,
+                "default": 45
+              },
+              {
+                "id": "alpha",
+                "label": "短路瞬间电压相角",
+                "unit": "°",
+                "min": 0,
+                "max": 180,
+                "step": 5,
+                "default": 0
+              }
+            ],
+            "output": "短路电流波形及周期、非周期分量",
+            "assumptions": "无限大电源、短路前空载、单相 RL 回路。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "若回路 R 很小、T_a 很大，冲击系数趋近多少？",
+              "answer": "趋近 2",
+              "explanation": "k_M = 1 + e^(−0.01/T_a)，T_a → ∞ 时 k_M → 2。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "短路瞬间电流为什么不能突变？这导致了什么分量出现？",
+              "为什么最大值出现在约半个周期后？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "generator-short-circuit",
+          "chapterId": "ch4-faults",
+          "order": 3,
+          "title": "同步发电机突然三相短路",
+          "prerequisites": [
+            "infinite-bus-short-circuit",
+            "generator-model",
+            "dq-transform"
+          ],
+          "summary": "发电机机端突然短路时，周期分量从次暂态值 E''/X''_d 衰减到暂态值 E'/X'_d，最终到稳态值 E_q/X_d。",
+          "explanation": "发电机突然短路时，转子励磁绕组和阻尼绕组中会感应电流以维持磁链不变，使定子电流初始值远大于稳态值。短路电流周期分量的变化可以分为三个阶段：次暂态（阻尼绕组起作用，用 X''_d 和 E''），暂态（阻尼绕组电流衰减完，用 X'_d 和 E'），稳态（用 X_d 和 E_q）。三个阶段分别以次暂态时间常数 T''_d（约几十毫秒）和暂态时间常数 T'_d（约 1 s 量级）衰减。一般 X''_d < X'_d < X_d。工程实用计算中最关心短路瞬间的起始次暂态电流 I''，用于设备选择和保护整定。",
+          "keyFormulas": [
+            {
+              "latex": "I'' = \\dfrac{E''}{X''_d},\\quad I' = \\dfrac{E'}{X'_d},\\quad I_\\infty = \\dfrac{E_q}{X_d}",
+              "display": "I'' = E'' / X''_d，I' = E' / X'_d，I∞ = E_q / X_d",
+              "variables": [
+                {
+                  "symbol": "X''_d, X'_d, X_d",
+                  "meaning": "次暂态、暂态、同步电抗",
+                  "unit": "pu"
+                },
+                {
+                  "symbol": "E'', E', E_q",
+                  "meaning": "对应电势",
+                  "unit": "pu"
+                }
+              ],
+              "conditions": "机端三相短路。"
+            }
+          ],
+          "workedExample": {
+            "problem": "100 MVA、10.5 kV 发电机空载额定电压下机端三相短路，X''_d = 0.15，X'_d = 0.25，X_d = 1.2（以额定值为基准）。求三个阶段的周期分量（标幺值和 kA）。",
+            "steps": [
+              "空载时 E'' = E' = E_q = 1.0。",
+              "I'' = 1/0.15 ≈ 6.67，I' = 1/0.25 = 4.0，I∞ = 1/1.2 ≈ 0.833（标幺值）。",
+              "基准电流 I_B = 100 / (√3 × 10.5) ≈ 5.50 kA。",
+              "I'' ≈ 36.7 kA，I' ≈ 22.0 kA，I∞ ≈ 4.58 kA。"
+            ],
+            "answer": "I'' ≈ 36.7 kA，I' ≈ 22.0 kA，I∞ ≈ 4.58 kA"
+          },
+          "misconceptions": [
+            {
+              "wrong": "发电机短路电流从一开始就是稳态值 E_q/X_d。",
+              "correct": "短路初期转子绕组感应电流抵制磁链变化，电流远大于稳态值，之后才逐渐衰减。"
+            },
+            {
+              "wrong": "稳态短路电流比额定电流大得多。",
+              "correct": "X_d 常大于 1，机端稳态短路电流可能接近甚至小于额定电流，但次暂态电流可达额定值的数倍。"
+            }
+          ],
+          "visualization": {
+            "calculator": "generator-sc-envelope",
+            "params": [
+              {
+                "id": "Xdpp",
+                "label": "次暂态电抗",
+                "unit": "pu",
+                "min": 0.08,
+                "max": 0.35,
+                "step": 0.01,
+                "default": 0.15
+              },
+              {
+                "id": "Xdp",
+                "label": "暂态电抗",
+                "unit": "pu",
+                "min": 0.15,
+                "max": 0.5,
+                "step": 0.01,
+                "default": 0.25
+              },
+              {
+                "id": "Xd",
+                "label": "同步电抗",
+                "unit": "pu",
+                "min": 0.6,
+                "max": 2.5,
+                "step": 0.05,
+                "default": 1.2
+              },
+              {
+                "id": "Tdpp",
+                "label": "次暂态时间常数",
+                "unit": "s",
+                "min": 0.01,
+                "max": 0.1,
+                "step": 0.005,
+                "default": 0.03
+              },
+              {
+                "id": "Tdp",
+                "label": "暂态时间常数",
+                "unit": "s",
+                "min": 0.3,
+                "max": 3,
+                "step": 0.1,
+                "default": 1.0
+              }
+            ],
+            "output": "周期分量包络线随时间衰减",
+            "assumptions": "空载机端三相短路，只画周期分量包络线。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "同一发电机若 X''_d = 0.2，起始次暂态电流为多少 kA？",
+              "answer": "约 27.5 kA",
+              "explanation": "I'' = 1/0.2 × 5.50 ≈ 27.5 kA。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "短路瞬间，转子绕组里的电流为什么会突然增大？",
+              "三个电抗为什么依次变大？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "practical-3ph-calculation",
+          "chapterId": "ch4-faults",
+          "order": 4,
+          "title": "三相短路的实用计算",
+          "prerequisites": [
+            "generator-short-circuit",
+            "per-unit-network"
+          ],
+          "summary": "实用计算取电源次暂态电势约为 1、各段用平均额定电压作基准，求出起始次暂态电流 I'' 和短路容量 S_k。",
+          "explanation": "工程上常用简化：电源电势取 E'' ≈ 1（标幺值），忽略负荷和电阻（高压网），各段基准电压取平均额定电压，元件只用电抗。这样起始次暂态电流 I''* = 1 / X_Σ*，X_Σ* 为短路点到电源的总电抗。短路容量 S_k = √3 U_av I''，在标幺制下 S_k* = I''*，它反映短路点与电源联系的紧密程度，也常用来反推系统等值电抗 X_s* = S_B / S_k。多电源网络需先把网络化简为短路点的等值电抗（或用转移阻抗分配各电源的贡献）。",
+          "keyFormulas": [
+            {
+              "latex": "I''_* = \\dfrac{1}{X_{\\Sigma*}},\\quad I'' = I''_* \\dfrac{S_B}{\\sqrt3\\,U_{av}}",
+              "display": "I''* = 1 / X_Σ*，I'' = I''* × S_B / (√3 U_av)",
+              "variables": [
+                {
+                  "symbol": "X_Σ*",
+                  "meaning": "短路回路总电抗",
+                  "unit": "pu"
+                },
+                {
+                  "symbol": "U_av",
+                  "meaning": "短路点所在段平均额定电压",
+                  "unit": "kV"
+                }
+              ],
+              "conditions": "E'' ≈ 1，忽略负荷和电阻。"
+            },
+            {
+              "latex": "S_k = \\sqrt3\\,U_{av}\\,I'' = I''_*\\,S_B",
+              "display": "S_k = √3 U_av I'' = I''* S_B",
+              "variables": [
+                {
+                  "symbol": "S_k",
+                  "meaning": "短路容量",
+                  "unit": "MVA"
+                }
+              ],
+              "conditions": ""
+            }
+          ],
+          "workedExample": {
+            "problem": "发电机 X'' = 0.2、变压器 X = 0.105（均已换算到 100 MVA），经 50 km、x₁ = 0.4 Ω/km 的 110 kV 线路，在线路末端三相短路。用近似法求 I''、S_k 和冲击电流（k_M = 1.8）。",
+            "steps": [
+              "线路电抗：X = 20 Ω，X* = 20 × 100 / 115² ≈ 0.151。",
+              "X_Σ = 0.2 + 0.105 + 0.151 ≈ 0.456，I''* = 1 / 0.456 ≈ 2.19。",
+              "I_B = 100 / (√3 × 115) ≈ 0.502 kA，I'' ≈ 1.10 kA；S_k ≈ 219 MVA。",
+              "i_M = 2.55 × 1.10 ≈ 2.81 kA。"
+            ],
+            "answer": "I'' ≈ 1.10 kA，S_k ≈ 219 MVA，i_M ≈ 2.81 kA"
+          },
+          "misconceptions": [
+            {
+              "wrong": "短路容量是断路器实际开断的功率。",
+              "correct": "短路容量是 √3 × 平均电压 × 短路电流的乘积，是表示短路严重程度的参数，并非真实传输的功率。"
+            },
+            {
+              "wrong": "实用计算中各段基准电压必须按变比推算。",
+              "correct": "实用计算通常采用近似法，直接取平均额定电压。"
+            }
+          ],
+          "visualization": {
+            "calculator": "sc-three-phase",
+            "params": [
+              {
+                "id": "Xg",
+                "label": "发电机次暂态电抗",
+                "unit": "pu",
+                "min": 0.05,
+                "max": 0.5,
+                "step": 0.005,
+                "default": 0.2
+              },
+              {
+                "id": "Xt",
+                "label": "变压器电抗",
+                "unit": "pu",
+                "min": 0.03,
+                "max": 0.3,
+                "step": 0.005,
+                "default": 0.105
+              },
+              {
+                "id": "l",
+                "label": "线路长度",
+                "unit": "km",
+                "min": 0,
+                "max": 200,
+                "step": 1,
+                "default": 50
+              },
+              {
+                "id": "x1",
+                "label": "线路单位电抗",
+                "unit": "Ω/km",
+                "min": 0.25,
+                "max": 0.45,
+                "step": 0.01,
+                "default": 0.4
+              },
+              {
+                "id": "Uav",
+                "label": "短路点平均电压",
+                "unit": "kV",
+                "min": 6.3,
+                "max": 525,
+                "step": 0.1,
+                "default": 115
+              }
+            ],
+            "output": "I''、S_k、i_M 随短路点位置变化",
+            "assumptions": "S_B = 100 MVA，E'' = 1，近似法，冲击系数 1.8。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "已知某 110 kV 母线短路容量 2000 MVA，S_B = 100 MVA 时系统等值电抗标幺值是多少？",
+              "answer": "0.05",
+              "explanation": "X_s* = S_B / S_k = 100 / 2000 = 0.05。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "为什么实用计算中可以把电源电势取为 1？这样做偏保守还是偏乐观？",
+              "短路点离电源越远，短路容量怎么变？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "symmetrical-components",
+          "chapterId": "ch4-faults",
+          "order": 5,
+          "title": "对称分量法",
+          "prerequisites": [
+            "ps-complex-power"
+          ],
+          "summary": "任意一组不对称三相相量可唯一分解为正序、负序、零序三组对称分量，从而把不对称问题化为三个对称问题分别计算。",
+          "explanation": "正序分量三相大小相等、相序 a-b-c；负序分量大小相等、相序 a-c-b；零序分量三相大小相等、相位相同。用算子 a = e^{j120°} 表示旋转 120°，1 + a + a² = 0。已知三相量可求 a 相的三个序分量，反之由序分量合成三相量。对称分量法成立的前提是网络三相参数对称、元件线性，此时各序电流只产生同序电压，三序网络相互独立，只在故障点通过边界条件联系。零序电流必须有中性线或大地回路才能流通。",
+          "keyFormulas": [
+            {
+              "latex": "\\begin{bmatrix}\\dot F_{a1}\\\\ \\dot F_{a2}\\\\ \\dot F_{a0}\\end{bmatrix} = \\dfrac13\\begin{bmatrix}1 & a & a^2\\\\ 1 & a^2 & a\\\\ 1 & 1 & 1\\end{bmatrix}\\begin{bmatrix}\\dot F_a\\\\ \\dot F_b\\\\ \\dot F_c\\end{bmatrix}",
+              "display": "F_a1 = (F_a + a F_b + a² F_c)/3，F_a2 = (F_a + a² F_b + a F_c)/3，F_a0 = (F_a + F_b + F_c)/3",
+              "variables": [
+                {
+                  "symbol": "a",
+                  "meaning": "旋转算子 e^(j120°)",
+                  "unit": "—"
+                },
+                {
+                  "symbol": "F_a1, F_a2, F_a0",
+                  "meaning": "a 相正、负、零序分量",
+                  "unit": "与原量同"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "\\dot F_a = \\dot F_{a1} + \\dot F_{a2} + \\dot F_{a0}",
+              "display": "F_a = F_a1 + F_a2 + F_a0；F_b = a² F_a1 + a F_a2 + F_a0；F_c = a F_a1 + a² F_a2 + F_a0",
+              "variables": [
+                {
+                  "symbol": "F_a, F_b, F_c",
+                  "meaning": "三相相量",
+                  "unit": "与原量同"
+                }
+              ],
+              "conditions": ""
+            }
+          ],
+          "workedExample": {
+            "problem": "三相电流 I_a = 10∠0° A，I_b = I_c = 0（只有 a 相有电流）。求 a 相的三个序分量。",
+            "steps": [
+              "I_a1 = (10 + 0 + 0)/3 ≈ 3.33∠0° A。",
+              "I_a2 = (10 + 0 + 0)/3 ≈ 3.33∠0° A。",
+              "I_a0 = (10 + 0 + 0)/3 ≈ 3.33∠0° A。",
+              "三个序分量相等，这正是单相接地短路时故障点电流的特征。"
+            ],
+            "answer": "I_a1 = I_a2 = I_a0 ≈ 3.33∠0° A"
+          },
+          "misconceptions": [
+            {
+              "wrong": "负序分量就是反向旋转的正序分量，没有实际意义。",
+              "correct": "负序电流在电机气隙中产生反向旋转磁场，引起转子发热和振动，是真实存在的。"
+            },
+            {
+              "wrong": "三角形接线中也能流过零序线电流。",
+              "correct": "三角形接线或不接地星形接线的线电流中不含零序分量，零序电流只能在三角形内部环流。"
+            }
+          ],
+          "visualization": {
+            "calculator": "sequence-decomposition",
+            "params": [
+              {
+                "id": "Ia",
+                "label": "a 相幅值",
+                "unit": "pu",
+                "min": 0,
+                "max": 2,
+                "step": 0.05,
+                "default": 1
+              },
+              {
+                "id": "Ib",
+                "label": "b 相幅值",
+                "unit": "pu",
+                "min": 0,
+                "max": 2,
+                "step": 0.05,
+                "default": 0
+              },
+              {
+                "id": "Ic",
+                "label": "c 相幅值",
+                "unit": "pu",
+                "min": 0,
+                "max": 2,
+                "step": 0.05,
+                "default": 0
+              },
+              {
+                "id": "phb",
+                "label": "b 相相角",
+                "unit": "°",
+                "min": -180,
+                "max": 180,
+                "step": 5,
+                "default": -120
+              },
+              {
+                "id": "phc",
+                "label": "c 相相角",
+                "unit": "°",
+                "min": -180,
+                "max": 180,
+                "step": 5,
+                "default": 120
+              }
+            ],
+            "output": "三相相量与三组序分量相量图",
+            "assumptions": "a 相相角取 0°。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "三相对称正序电流 I_a = 10∠0°、I_b = 10∠−120°、I_c = 10∠120°，三个序分量各是多少？",
+              "answer": "I_a1 = 10∠0°，I_a2 = 0，I_a0 = 0",
+              "explanation": "对称正序量只含正序分量。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "为什么要把一个不对称问题拆成三个对称问题？",
+              "1 + a + a² = 0 在分解中起了什么作用？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "sequence-impedance",
+          "chapterId": "ch4-faults",
+          "order": 6,
+          "title": "电力系统元件的序阻抗",
+          "prerequisites": [
+            "symmetrical-components",
+            "transformer-2w",
+            "generator-short-circuit"
+          ],
+          "summary": "静止元件正序与负序阻抗相等；旋转电机负序阻抗不同于正序；零序阻抗与接地方式和变压器绕组接线密切相关。",
+          "explanation": "线路：正序 = 负序；零序电流经大地返回，零序电抗约为正序的 3~5 倍，有架空地线时较小。发电机：正序电抗随时间变化（X''_d 等），负序电抗 X₂ ≈ (X''_d + X''_q)/2，零序电抗很小，但只有中性点接地时零序电流才能流入，中性点经阻抗 Z_n 接地时零序网络中计入 3Z_n。变压器：正序 = 负序 = 漏抗；零序取决于绕组接线：YN 侧零序电流可以流通；d 侧零序电流在三角形内环流，对外相当于短路到零电位、但不流出线端；Y（不接地）侧零序电流不能流通。例如 YN,d 变压器从 YN 侧看入零序电抗约等于漏抗 X_T，从 d 侧看入为开路。",
+          "keyFormulas": [
+            {
+              "latex": "X_1 = X_2,\\quad X_0 \\approx (3\\sim5.5)X_1",
+              "display": "X₁ = X₂，X₀ ≈ (3~5.5) X₁",
+              "variables": [
+                {
+                  "symbol": "X₁, X₂, X₀",
+                  "meaning": "线路正、负、零序电抗",
+                  "unit": "Ω 或 pu"
+                }
+              ],
+              "conditions": "架空线路，有无地线影响系数。"
+            },
+            {
+              "latex": "X_2 \\approx \\dfrac{X''_d + X''_q}{2}",
+              "display": "X₂ ≈ (X''_d + X''_q) / 2",
+              "variables": [
+                {
+                  "symbol": "X₂",
+                  "meaning": "发电机负序电抗",
+                  "unit": "pu"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "Z_{0} = Z_{0,\\text{元件}} + 3Z_n",
+              "display": "Z₀ = Z₀(元件) + 3 Z_n",
+              "variables": [
+                {
+                  "symbol": "Z_n",
+                  "meaning": "中性点接地阻抗",
+                  "unit": "Ω 或 pu"
+                }
+              ],
+              "conditions": "零序网络中中性点阻抗按 3 倍计入。"
+            }
+          ],
+          "workedExample": {
+            "problem": "一台 YN,d11 变压器 X_T = 0.105。分别从 YN 侧和 d 侧看入，零序电抗是多少？若 YN 侧中性点经 X_n = 0.02 接地呢？",
+            "steps": [
+              "从 YN 侧看入：零序电流经 YN 绕组流入大地，d 侧绕组为零序电流提供环流通路，相当于短接，零序电抗 ≈ X_T = 0.105（忽略励磁）。",
+              "从 d 侧看入：线端没有零序电流通路，零序电抗为无穷大（开路）。",
+              "中性点经 X_n 接地时，从 YN 侧看入零序电抗 = 0.105 + 3 × 0.02 = 0.165。"
+            ],
+            "answer": "YN 侧 0.105（经电抗接地时 0.165），d 侧开路"
+          },
+          "misconceptions": [
+            {
+              "wrong": "变压器正、负、零序阻抗都相同。",
+              "correct": "正、负序相同，零序取决于绕组接线和中性点接地情况。"
+            },
+            {
+              "wrong": "中性点接地阻抗在零序网络中按原值计入。",
+              "correct": "三相零序电流都流过中性点，中性点电流为 3I₀，所以按 3Z_n 计入。"
+            }
+          ],
+          "visualization": null,
+          "images": [],
+          "practice": [
+            {
+              "question": "Y,yn 接线变压器（高压侧中性点不接地，低压侧接地）从低压侧看入零序电抗如何？",
+              "answer": "很大，可视为开路（三相五柱或单相组式）或较大的有限值（三相三柱式）。",
+              "explanation": "高压侧不接地，零序电流无法在高压侧平衡，只能靠励磁支路，零序电抗取决于铁芯结构。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "为什么零序电流非要有接地回路才能流通？",
+              "d 绕组对零序电流来说像什么？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "sequence-networks",
+          "chapterId": "ch4-faults",
+          "order": 7,
+          "title": "序网络的制定",
+          "prerequisites": [
+            "sequence-impedance"
+          ],
+          "summary": "正序网络包含电源电势和全部元件正序阻抗；负序网络结构与正序相同但无电源；零序网络从故障点出发，只包含零序电流能流通的元件。",
+          "explanation": "正序网络：与三相短路计算用的网络相同，含各电源电势和元件正序阻抗。负序网络：元件与正序相同（旋转电机用负序电抗），但不含电源电势，因为电源只产生正序电势。零序网络：在故障点施加零序电压，看零序电流能流到哪里。只经过中性点接地的星形绕组、线路和大地形成回路；遇到 d 绕组即接零电位，遇到不接地 Y 绕组即断开；中性点接地阻抗按 3Z_n 计入。制定零序网络是不对称故障计算中最容易出错的一步，应从故障点逐个元件分析。",
+          "keyFormulas": [
+            {
+              "latex": "\\dot U_{f1} = \\dot U_{f0} - Z_{1\\Sigma}\\dot I_{f1},\\ \\ \\dot U_{f2} = -Z_{2\\Sigma}\\dot I_{f2},\\ \\ \\dot U_{f0}^{(0)} = -Z_{0\\Sigma}\\dot I_{f0}",
+              "display": "U_f1 = U_f|0| − Z1Σ I_f1，U_f2 = −Z2Σ I_f2，U_f0 = −Z0Σ I_f0",
+              "variables": [
+                {
+                  "symbol": "U_f|0|",
+                  "meaning": "故障前故障点电压",
+                  "unit": "pu"
+                },
+                {
+                  "symbol": "Z1Σ, Z2Σ, Z0Σ",
+                  "meaning": "从故障点看入的各序等值阻抗",
+                  "unit": "pu"
+                }
+              ],
+              "conditions": ""
+            }
+          ],
+          "workedExample": {
+            "problem": "系统：发电机 G（中性点经 Z_n 接地）— 变压器 T1（发电机侧 d，线路侧 YN）— 线路 L — 故障点 f。写出零序网络包含的元件。",
+            "steps": [
+              "从 f 出发，零序电流经线路 L 的零序阻抗流向 T1。",
+              "T1 线路侧为 YN，零序电流可以流入，经 T1 零序（漏）电抗。",
+              "T1 发电机侧为 d，零序电流在三角形内环流，对外接零电位，回路在此闭合。",
+              "因此发电机及其中性点阻抗 3Z_n 不出现在零序网络中。"
+            ],
+            "answer": "零序网络 = 线路零序阻抗 + T1 零序电抗（接零电位），不含发电机和 3Z_n"
+          },
+          "misconceptions": [
+            {
+              "wrong": "负序网络里也有电源。",
+              "correct": "电源只产生正序电势，负序网络无源。"
+            },
+            {
+              "wrong": "零序网络和正序网络结构一样，只是阻抗不同。",
+              "correct": "零序网络结构由接地方式和变压器接线决定，通常与正序网络差别很大。"
+            }
+          ],
+          "visualization": null,
+          "images": [],
+          "practice": [
+            {
+              "question": "若上例 T1 发电机侧改为 YN，零序网络有何变化？",
+              "answer": "零序电流可经 T1 流到发电机，发电机零序电抗和 3Z_n 都要计入。",
+              "explanation": "YN,yn 两侧接地时零序电流可以穿过变压器。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "从故障点出发，零序电流遇到 d 绕组会怎样？遇到不接地的 Y 绕组呢？",
+              "为什么负序网络里没有电源？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "single-line-ground-fault",
+          "chapterId": "ch4-faults",
+          "order": 8,
+          "title": "单相接地短路",
+          "prerequisites": [
+            "sequence-networks"
+          ],
+          "summary": "单相接地短路时三序网络串联，正、负、零序电流相等，故障电流为正序电流的 3 倍；零序阻抗小于正序时，单相接地电流可能大于三相短路电流。",
+          "explanation": "a 相经过渡阻抗 Z_f 接地时，边界条件为 U_fa = Z_f I_fa，I_fb = I_fc = 0。换成序分量得 I_fa1 = I_fa2 = I_fa0，对应正、负、零序网络在故障点串联（再串 3Z_f）。故障相电流 I_fa = 3I_fa1。金属性接地时非故障相电压与 Z₀/Z₁ 有关，零序阻抗越大，非故障相电压升高越多。零序电流是接地保护的依据。",
+          "keyFormulas": [
+            {
+              "latex": "\\dot I_{fa1} = \\dot I_{fa2} = \\dot I_{fa0} = \\dfrac{\\dot U_{f|0|}}{Z_{1\\Sigma} + Z_{2\\Sigma} + Z_{0\\Sigma} + 3Z_f}",
+              "display": "I_fa1 = I_fa2 = I_fa0 = U_f|0| / (Z1Σ + Z2Σ + Z0Σ + 3Z_f)",
+              "variables": [
+                {
+                  "symbol": "Z_f",
+                  "meaning": "过渡阻抗",
+                  "unit": "pu"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "\\dot I_{fa} = 3\\dot I_{fa1}",
+              "display": "I_fa = 3 I_fa1",
+              "variables": [
+                {
+                  "symbol": "I_fa",
+                  "meaning": "故障相电流",
+                  "unit": "pu"
+                }
+              ],
+              "conditions": ""
+            }
+          ],
+          "workedExample": {
+            "problem": "故障点 X₁Σ = X₂Σ = 0.4，X₀Σ = 0.3，故障前电压 1.0，金属性 a 相接地。求故障电流，并与三相短路比较。",
+            "steps": [
+              "I_fa1 = 1 / (0.4 + 0.4 + 0.3) ≈ 0.909。",
+              "I_fa = 3 × 0.909 ≈ 2.73。",
+              "三相短路电流 = 1 / 0.4 = 2.5，单相接地电流更大，因为 X₀Σ < X₁Σ。"
+            ],
+            "answer": "单相接地 2.73，三相短路 2.5（标幺值）"
+          },
+          "misconceptions": [
+            {
+              "wrong": "单相接地电流一定小于三相短路电流。",
+              "correct": "当 X₀Σ < X₁Σ（例如靠近中性点接地的大型变压器）时，单相接地电流会大于三相短路电流。"
+            },
+            {
+              "wrong": "故障电流等于正序电流。",
+              "correct": "单相接地时故障相电流是正序电流的 3 倍。"
+            }
+          ],
+          "visualization": {
+            "calculator": "unbalanced-fault",
+            "params": [
+              {
+                "id": "X1",
+                "label": "正序电抗",
+                "unit": "pu",
+                "min": 0.05,
+                "max": 1,
+                "step": 0.01,
+                "default": 0.4
+              },
+              {
+                "id": "X2",
+                "label": "负序电抗",
+                "unit": "pu",
+                "min": 0.05,
+                "max": 1,
+                "step": 0.01,
+                "default": 0.4
+              },
+              {
+                "id": "X0",
+                "label": "零序电抗",
+                "unit": "pu",
+                "min": 0.05,
+                "max": 2,
+                "step": 0.01,
+                "default": 0.3
+              },
+              {
+                "id": "Zf",
+                "label": "过渡电阻",
+                "unit": "pu",
+                "min": 0,
+                "max": 0.5,
+                "step": 0.01,
+                "default": 0
+              },
+              {
+                "id": "type",
+                "label": "故障类型（1/2/3/4 = 单相接地/两相/两相接地/三相）",
+                "unit": "—",
+                "min": 1,
+                "max": 4,
+                "step": 1,
+                "default": 1
+              }
+            ],
+            "output": "序网连接图、故障相电流与相量图",
+            "assumptions": "纯电抗网络，故障前电压 1.0，过渡阻抗为纯电阻。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "上例若 X₀Σ = 0.8，单相接地电流为多少？",
+              "answer": "1.875",
+              "explanation": "I_fa = 3 / (0.4 + 0.4 + 0.8) = 1.875，小于三相短路电流。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "边界条件 I_b = I_c = 0 意味着三个序电流有什么关系？",
+              "为什么三序网络是“串联”的？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "line-to-line-faults",
+          "chapterId": "ch4-faults",
+          "order": 9,
+          "title": "两相短路与两相接地短路",
+          "prerequisites": [
+            "single-line-ground-fault"
+          ],
+          "summary": "两相短路时正、负序网络并联，无零序；两相接地短路时三序网络并联。X₁ = X₂ 时两相短路电流约为三相短路电流的 0.866 倍。",
+          "explanation": "b、c 两相短路（不接地）：边界条件 I_fa = 0，I_fb = −I_fc，U_fb = U_fc，换成序分量得 I_fa0 = 0，I_fa1 = −I_fa2，U_fa1 = U_fa2，即正、负序网络在故障点并联，没有零序电流。故障相电流 I_fb = −j√3 I_fa1，幅值为 √3 倍正序电流。b、c 两相接地短路：边界条件 I_fa = 0，U_fb = U_fc = 0，换成序分量得 U_fa1 = U_fa2 = U_fa0，三序网络并联，I_fa1 = U_f|0| / (Z₁Σ + Z₂Σ∥Z₀Σ)，负序、零序电流按阻抗反比分配。流入大地的电流为 3I_fa0。",
+          "keyFormulas": [
+            {
+              "latex": "I_{f}^{(2)} = \\sqrt3\\,\\dfrac{U_{f|0|}}{Z_{1\\Sigma}+Z_{2\\Sigma}}",
+              "display": "两相短路：I_f(2) = √3 × U_f|0| / (Z1Σ + Z2Σ)",
+              "variables": [
+                {
+                  "symbol": "I_f(2)",
+                  "meaning": "两相短路故障相电流",
+                  "unit": "pu"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "\\dot I_{fa1} = \\dfrac{\\dot U_{f|0|}}{Z_{1\\Sigma} + \\dfrac{Z_{2\\Sigma}Z_{0\\Sigma}}{Z_{2\\Sigma}+Z_{0\\Sigma}}},\\ \\ \\dot I_{fa2} = -\\dot I_{fa1}\\dfrac{Z_{0\\Sigma}}{Z_{2\\Sigma}+Z_{0\\Sigma}},\\ \\ \\dot I_{fa0} = -\\dot I_{fa1}\\dfrac{Z_{2\\Sigma}}{Z_{2\\Sigma}+Z_{0\\Sigma}}",
+              "display": "两相接地：I_fa1 = U_f|0| / (Z1Σ + Z2Σ∥Z0Σ)，I_fa2 = −I_fa1 Z0Σ/(Z2Σ + Z0Σ)，I_fa0 = −I_fa1 Z2Σ/(Z2Σ + Z0Σ)",
+              "variables": [
+                {
+                  "symbol": "I_fa1, I_fa2, I_fa0",
+                  "meaning": "故障点 a 相序电流",
+                  "unit": "pu"
+                }
+              ],
+              "conditions": ""
+            }
+          ],
+          "workedExample": {
+            "problem": "同“单相接地短路”一节的网络（X₁Σ = X₂Σ = 0.4，X₀Σ = 0.3）。求 b、c 两相短路和两相接地短路时的故障相电流及入地电流。",
+            "steps": [
+              "两相短路：I_fa1 = 1 / 0.8 = 1.25，I_f = √3 × 1.25 ≈ 2.17。",
+              "两相接地：X₂∥X₀ = 0.12/0.7 ≈ 0.171，I_fa1 = 1 / 0.571 = 1.75。",
+              "I_fa2 = −1.75 × 0.3/0.7 = −0.75，I_fa0 = −1.75 × 0.4/0.7 = −1.0，入地电流 3|I_fa0| = 3.0。",
+              "故障相电流 |I_fb| = |a²I_fa1 + aI_fa2 + I_fa0| ≈ 2.63。"
+            ],
+            "answer": "两相短路 2.17；两相接地故障相电流 2.63，入地电流 3.0（标幺值）"
+          },
+          "misconceptions": [
+            {
+              "wrong": "两相短路也有零序电流。",
+              "correct": "不接地的两相短路没有对地回路，零序电流为零。"
+            },
+            {
+              "wrong": "两相接地短路就是两个单相接地。",
+              "correct": "两相接地是三序网络并联，与单相接地的串联完全不同，不能简单叠加。"
+            }
+          ],
+          "visualization": null,
+          "images": [],
+          "practice": [
+            {
+              "question": "X₁Σ = X₂Σ 时，两相短路电流与三相短路电流之比是多少？",
+              "answer": "√3/2 ≈ 0.866",
+              "explanation": "I(2) = √3/(2X₁)，I(3) = 1/X₁。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "两相短路的边界条件里，为什么没有零序电流？",
+              "两相接地时零序阻抗越小，入地电流怎么变？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "positive-sequence-equivalence",
+          "chapterId": "ch4-faults",
+          "order": 10,
+          "title": "正序等效定则与不对称故障综合",
+          "prerequisites": [
+            "single-line-ground-fault",
+            "line-to-line-faults"
+          ],
+          "summary": "各类短路的正序电流都可写成 I_fa1 = U_f|0| / (Z₁Σ + Z_Δ)，故障相电流 I_f = m·I_fa1，只需查表得到附加阻抗 Z_Δ 和系数 m。",
+          "explanation": "比较四种短路的公式发现：正序电流都等于在正序网络故障点串入一个附加阻抗 Z_Δ⁽ⁿ⁾ 后发生三相短路的电流，这就是正序等效定则。附加阻抗：三相短路 0；两相短路 Z₂Σ；单相接地 Z₂Σ + Z₀Σ；两相接地 Z₂Σ∥Z₀Σ。故障相电流系数 m：三相 1；两相 √3；单相接地 3；两相接地 √3·√(1 − Z₂ΣZ₀Σ/(Z₂Σ + Z₀Σ)²)（纯电抗时）。这样不对称故障可以借用三相短路的计算方法，也便于比较各类故障的严重程度。",
+          "keyFormulas": [
+            {
+              "latex": "\\dot I_{fa1}^{(n)} = \\dfrac{\\dot U_{f|0|}}{Z_{1\\Sigma} + Z_\\Delta^{(n)}},\\quad I_f^{(n)} = m^{(n)} I_{fa1}^{(n)}",
+              "display": "I_fa1(n) = U_f|0| / (Z1Σ + Z_Δ(n))，I_f(n) = m(n) × I_fa1(n)",
+              "variables": [
+                {
+                  "symbol": "Z_Δ(n)",
+                  "meaning": "附加阻抗",
+                  "unit": "pu"
+                },
+                {
+                  "symbol": "m(n)",
+                  "meaning": "故障相电流系数",
+                  "unit": "—"
+                }
+              ],
+              "conditions": ""
+            }
+          ],
+          "workedExample": {
+            "problem": "用正序等效定则，比较 X₁Σ = X₂Σ = 0.4、X₀Σ = 0.3 时四种短路的故障电流。",
+            "steps": [
+              "三相：Z_Δ = 0，I = 1/0.4 = 2.50。",
+              "两相：Z_Δ = 0.4，I₁ = 1.25，I = √3 × 1.25 ≈ 2.17。",
+              "单相接地：Z_Δ = 0.7，I₁ ≈ 0.909，I = 3 × 0.909 ≈ 2.73。",
+              "两相接地：Z_Δ ≈ 0.171，I₁ = 1.75，m = √3 × √(1 − 0.12/0.49) ≈ 1.505，I ≈ 2.63。"
+            ],
+            "answer": "单相接地 2.73 > 两相接地 2.63 > 三相 2.50 > 两相 2.17"
+          },
+          "misconceptions": [
+            {
+              "wrong": "附加阻抗是一个真实的物理阻抗。",
+              "correct": "附加阻抗是由负序、零序网络等效出来的计算量，不对应真实元件。"
+            },
+            {
+              "wrong": "三相短路永远是最严重的。",
+              "correct": "取决于 Z₀Σ 与 Z₁Σ 的关系，Z₀Σ 较小时接地故障电流可能更大。"
+            }
+          ],
+          "visualization": {
+            "calculator": "unbalanced-fault",
+            "params": [
+              {
+                "id": "X1",
+                "label": "正序电抗",
+                "unit": "pu",
+                "min": 0.05,
+                "max": 1,
+                "step": 0.01,
+                "default": 0.4
+              },
+              {
+                "id": "X2",
+                "label": "负序电抗",
+                "unit": "pu",
+                "min": 0.05,
+                "max": 1,
+                "step": 0.01,
+                "default": 0.4
+              },
+              {
+                "id": "X0",
+                "label": "零序电抗",
+                "unit": "pu",
+                "min": 0.05,
+                "max": 2,
+                "step": 0.01,
+                "default": 0.3
+              }
+            ],
+            "output": "四种短路电流随 X₀ 变化的对比曲线",
+            "assumptions": "纯电抗网络，金属性短路，故障前电压 1.0。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "X₀Σ 很大（如中性点不接地）时，两相接地短路电流趋近于哪种短路？",
+              "answer": "趋近两相短路",
+              "explanation": "Z₂Σ∥Z₀Σ → Z₂Σ，m → √3。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "为什么所有不对称故障都能“变成”一个三相短路来算？",
+              "试着把 Z₀Σ 从小调到大，看看四种故障电流的大小顺序怎么变。"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        }
+      ]
+    },
+    {
+      "id": "ch5-traction-harmonics",
+      "order": 5,
+      "title": "牵引供电与谐波",
+      "description": "交流与直流牵引供电系统、负序问题与谐波。",
+      "concepts": [
+        {
+          "id": "ac-traction-system",
+          "chapterId": "ch5-traction-harmonics",
+          "order": 1,
+          "title": "交流牵引供电系统与供电方式",
+          "prerequisites": [
+            "ps-voltage-levels",
+            "line-voltage-drop"
+          ],
+          "summary": "我国电气化铁路采用单相工频 25 kV 交流制，牵引变电所从 110/220 kV 电网取电，接触网有直接供电、BT 和 AT 等供电方式。",
+          "explanation": "交流电气化铁路的牵引供电系统由外部电源、牵引变电所、接触网、钢轨与回流线等组成。牵引变电所把 110 kV 或 220 kV 三相电压降为单相 27.5 kV（AT 方式为 2 × 27.5 kV），向两侧供电臂供电，相邻供电臂之间设电分相。直接供电方式结构简单，但钢轨和大地回流对通信干扰较大；带回流线的直接供电方式改善了干扰；BT（吸流变压器）方式强制电流经回流线返回；AT（自耦变压器）方式以 2 × 25 kV 供电，接触线与正馈线间电压为 50 kV，相同功率下馈线电流减半，供电距离长、电压损失小，高速铁路普遍采用。",
+          "keyFormulas": [
+            {
+              "latex": "I \\approx \\dfrac{P}{U\\cos\\varphi}",
+              "display": "I ≈ P / (U cosφ)",
+              "variables": [
+                {
+                  "symbol": "I",
+                  "meaning": "机车电流",
+                  "unit": "A"
+                },
+                {
+                  "symbol": "P",
+                  "meaning": "机车有功功率",
+                  "unit": "W"
+                },
+                {
+                  "symbol": "U",
+                  "meaning": "接触网电压",
+                  "unit": "V"
+                },
+                {
+                  "symbol": "cosφ",
+                  "meaning": "机车功率因数",
+                  "unit": "—"
+                }
+              ],
+              "conditions": "单相交流。"
+            }
+          ],
+          "workedExample": {
+            "problem": "一列机车功率 10 MW，接触网电压 25 kV，功率因数 0.95。求机车电流；若采用 AT 供电，自耦变压器之间馈线电流大约多少？",
+            "steps": [
+              "I = 10×10⁶ / (25×10³ × 0.95) ≈ 421 A。",
+              "AT 方式下功率以 50 kV（接触线对正馈线）电压输送，同样功率时馈线电流约为一半，约 211 A（教学近似，忽略 AT 分流细节）。"
+            ],
+            "answer": "机车电流约 421 A；AT 馈线电流约 211 A"
+          },
+          "misconceptions": [
+            {
+              "wrong": "牵引网是三相供电。",
+              "correct": "我国干线电气化铁路采用单相工频交流供电，这是产生负序问题的根源。"
+            },
+            {
+              "wrong": "AT 供电的接触网对地电压是 50 kV。",
+              "correct": "接触线和正馈线对地都是 25 kV，二者之间为 50 kV。"
+            }
+          ],
+          "visualization": null,
+          "images": [],
+          "practice": [
+            {
+              "question": "AT 方式为什么能延长供电距离？",
+              "answer": "以 50 kV 输送使电流减半，电压损失和功率损耗显著减小。",
+              "explanation": "同样功率下电流减半，阻抗压降约减半，损耗约减为四分之一（教学近似）。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "为什么相邻供电臂之间要设电分相？",
+              "AT 方式的“2 × 25 kV”具体是指哪两点之间的电压？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "traction-negative-sequence",
+          "chapterId": "ch5-traction-harmonics",
+          "order": 2,
+          "title": "牵引负荷的负序影响与牵引变压器接线",
+          "prerequisites": [
+            "ac-traction-system",
+            "symmetrical-components"
+          ],
+          "summary": "单相牵引负荷接在三相电网上会产生负序电流，造成电网电压不平衡；采用换相连接和平衡变压器（如 Scott 接线）可以减小负序。",
+          "explanation": "单相负荷接在三相电网两相之间时，按对称分量法分解，负序电流与正序电流大小相等，会在电网中引起负序电压，造成发电机转子发热、电动机效率下降、某些保护误动。电压不平衡度可近似估算为 ε_U ≈ S_L / S_k（S_L 为单相负荷容量，S_k 为公共连接点短路容量）。减小负序的措施：相邻牵引变电所轮换接入不同相别（换相连接）；采用 V/v、YN,d11 等接线并合理分配两供电臂负荷；采用 Scott、阻抗匹配平衡变压器，两臂负荷相等时理论上不产生负序；提高接入电压等级以增大短路容量；装设静止无功补偿或有源补偿装置。国家标准 GB/T 15543 对公共连接点三相电压不平衡度规定了限值（正常允许 2%、短时不超过 4%，单个用户引起的一般不超过 1.3%），以现行标准为准。",
+          "keyFormulas": [
+            {
+              "latex": "\\varepsilon_U \\approx \\dfrac{S_L}{S_k}\\times 100\\%",
+              "display": "ε_U ≈ S_L / S_k × 100%",
+              "variables": [
+                {
+                  "symbol": "ε_U",
+                  "meaning": "负序电压不平衡度",
+                  "unit": "%"
+                },
+                {
+                  "symbol": "S_L",
+                  "meaning": "单相负荷容量",
+                  "unit": "MVA"
+                },
+                {
+                  "symbol": "S_k",
+                  "meaning": "公共连接点三相短路容量",
+                  "unit": "MVA"
+                }
+              ],
+              "conditions": "单相负荷接于两相之间，估算公式。"
+            }
+          ],
+          "workedExample": {
+            "problem": "某牵引变电所单相负荷 20 MVA，接入点 220 kV 母线三相短路容量 2000 MVA。估算负序电压不平衡度；若改接 110 kV 母线（短路容量 800 MVA）呢？",
+            "steps": [
+              "220 kV：ε_U ≈ 20 / 2000 = 1.0%。",
+              "110 kV：ε_U ≈ 20 / 800 = 2.5%，超过 2% 的正常允许值。",
+              "说明接入更高电压等级（短路容量更大）可以明显减小不平衡度。"
+            ],
+            "answer": "220 kV 约 1.0%；110 kV 约 2.5%"
+          },
+          "misconceptions": [
+            {
+              "wrong": "单相负荷的负序电流比正序小很多，可以忽略。",
+              "correct": "接在两相之间的单相负荷，其负序电流与正序电流大小相等。"
+            },
+            {
+              "wrong": "Scott 变压器在任何负荷下都没有负序。",
+              "correct": "只有两供电臂负荷相等时负序才为零，实际两臂负荷常不相等。"
+            }
+          ],
+          "visualization": {
+            "calculator": "traction-unbalance",
+            "params": [
+              {
+                "id": "SL",
+                "label": "单相负荷容量",
+                "unit": "MVA",
+                "min": 1,
+                "max": 100,
+                "step": 1,
+                "default": 20
+              },
+              {
+                "id": "Sk",
+                "label": "接入点短路容量",
+                "unit": "MVA",
+                "min": 200,
+                "max": 10000,
+                "step": 50,
+                "default": 2000
+              }
+            ],
+            "output": "负序电压不平衡度与标准限值对比",
+            "assumptions": "单相负荷接于两相之间的估算公式，不考虑换相连接。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "同一 220 kV 母线上负荷增加到 40 MVA，不平衡度约为多少？",
+              "answer": "约 2.0%",
+              "explanation": "ε_U ≈ 40 / 2000 = 2.0%，达到正常允许值上限。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "单相负荷接在 b、c 两相之间，试用对称分量法写出负序电流。",
+              "为什么短路容量越大，不平衡度越小？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "harmonics-basics",
+          "chapterId": "ch5-traction-harmonics",
+          "order": 3,
+          "title": "谐波的产生、指标与谐振",
+          "prerequisites": [
+            "ps-power-quality",
+            "symmetrical-components"
+          ],
+          "summary": "整流、变频等非线性负荷注入谐波电流，用电压总谐波畸变率 THD 评价；电容器与系统电感可能在某次谐波发生并联谐振，放大谐波。",
+          "explanation": "非线性负荷电流不是正弦波，可按傅里叶级数分解为基波和各次谐波。三相 6 脉波整流器的特征谐波次数为 6k ± 1（5、7、11、13 次……），12 脉波为 12k ± 1；传统交-直型电力机车产生大量 3、5、7 次谐波，交-直-交型机车低次谐波小，但可能激发高次谐波谐振。评价指标为各次谐波含有率 HRU_h = U_h/U₁ 和电压总谐波畸变率 THD_U。GB/T 14549 规定了各电压等级公用电网的限值（例如 0.38 kV 为 5%、6~10 kV 为 4%），以现行标准为准。并联电容器与系统短路电抗在 h_r = √(S_k/Q_C) 次附近发生并联谐振，若接近负荷的特征谐波会严重放大谐波，常串联电抗器避开。",
+          "keyFormulas": [
+            {
+              "latex": "THD_U = \\dfrac{\\sqrt{\\sum_{h\\ge2}U_h^2}}{U_1}\\times100\\%",
+              "display": "THD_U = √(Σ U_h²) / U₁ × 100%",
+              "variables": [
+                {
+                  "symbol": "U_h",
+                  "meaning": "第 h 次谐波电压有效值",
+                  "unit": "kV"
+                },
+                {
+                  "symbol": "U₁",
+                  "meaning": "基波电压有效值",
+                  "unit": "kV"
+                }
+              ],
+              "conditions": ""
+            },
+            {
+              "latex": "h_r \\approx \\sqrt{\\dfrac{S_k}{Q_C}}",
+              "display": "h_r ≈ √(S_k / Q_C)",
+              "variables": [
+                {
+                  "symbol": "h_r",
+                  "meaning": "并联谐振次数",
+                  "unit": "—"
+                },
+                {
+                  "symbol": "S_k",
+                  "meaning": "电容器安装点短路容量",
+                  "unit": "MVA"
+                },
+                {
+                  "symbol": "Q_C",
+                  "meaning": "电容器容量",
+                  "unit": "Mvar"
+                }
+              ],
+              "conditions": "忽略电阻和负荷。"
+            }
+          ],
+          "workedExample": {
+            "problem": "某 10 kV 母线电压含 5 次谐波 4%、7 次 3%、11 次 1.5%（相对基波）。求 THD；若母线短路容量 200 MVA、拟装 8 Mvar 电容器，谐振次数是多少？",
+            "steps": [
+              "THD = √(4² + 3² + 1.5²) % = √27.25 % ≈ 5.22%，超过 10 kV 的 4% 限值。",
+              "h_r = √(200 / 8) = 5。",
+              "谐振点恰好在 5 次，会放大 5 次谐波，应加装串联电抗器（如 6% 左右的电抗率）使谐振点低于 5 次。"
+            ],
+            "answer": "THD ≈ 5.22%；谐振次数 5，需要串联电抗器"
+          },
+          "misconceptions": [
+            {
+              "wrong": "加装电容器总能改善电能质量。",
+              "correct": "电容器可能与系统电感谐振放大谐波，需校核谐振点。"
+            },
+            {
+              "wrong": "三相 6 脉波整流产生大量 3 次谐波。",
+              "correct": "三相对称 6 脉波整流的特征谐波为 6k ± 1 次，理想情况下不含 3 次谐波；单相整流（如交-直型机车）才有较大 3 次谐波。"
+            }
+          ],
+          "visualization": {
+            "calculator": "harmonic-spectrum",
+            "params": [
+              {
+                "id": "h5",
+                "label": "5 次谐波含有率",
+                "unit": "%",
+                "min": 0,
+                "max": 10,
+                "step": 0.1,
+                "default": 4
+              },
+              {
+                "id": "h7",
+                "label": "7 次谐波含有率",
+                "unit": "%",
+                "min": 0,
+                "max": 10,
+                "step": 0.1,
+                "default": 3
+              },
+              {
+                "id": "h11",
+                "label": "11 次谐波含有率",
+                "unit": "%",
+                "min": 0,
+                "max": 5,
+                "step": 0.1,
+                "default": 1.5
+              },
+              {
+                "id": "Sk",
+                "label": "短路容量",
+                "unit": "MVA",
+                "min": 20,
+                "max": 2000,
+                "step": 10,
+                "default": 200
+              },
+              {
+                "id": "Qc",
+                "label": "电容器容量",
+                "unit": "Mvar",
+                "min": 0.5,
+                "max": 50,
+                "step": 0.5,
+                "default": 8
+              }
+            ],
+            "output": "波形合成、频谱柱状图、THD 与谐振点",
+            "assumptions": "只考虑列出的特征谐波，谐振估算忽略电阻。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "上例若改装 12 Mvar 电容器，谐振次数约为多少？",
+              "answer": "约 4.08",
+              "explanation": "h_r = √(200/12) ≈ 4.08，接近 4 次，需要结合实际谐波源检查。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "为什么 6 脉波整流器的谐波次数是 6k ± 1？",
+              "电容器容量增大，谐振次数怎么变？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        },
+        {
+          "id": "dc-traction-system",
+          "chapterId": "ch5-traction-harmonics",
+          "order": 4,
+          "title": "城市轨道交通直流牵引供电",
+          "prerequisites": [
+            "ac-traction-system",
+            "radial-power-flow"
+          ],
+          "summary": "地铁和轻轨多用直流 750 V 或 1500 V 供电，牵引变电所用多脉波整流，钢轨回流会产生杂散电流；其计算与交流电网的“直流潮流”是不同问题。",
+          "explanation": "城市轨道交通牵引变电所从 10 kV 或 35 kV 中压网取电，经整流机组（常用等效 24 脉波）输出直流 750 V 或 1500 V，经接触网或第三轨向列车供电，电流经走行钢轨返回。多个牵引变电所沿线并联给同一接触网供电（双边供电），列车功率在变电所之间按回路电阻分配。列车近似为恒功率负荷，因此网压与电流需要联立求解。钢轨对地并非完全绝缘，部分电流经大地流回变电所，形成杂散电流，会腐蚀地下金属管线和结构钢筋，需要排流和监测。直流牵引网计算是真正的直流电路计算，而“直流潮流”是交流电网有功潮流的线性近似，两者不能混为一谈。",
+          "keyFormulas": [
+            {
+              "latex": "U\\,\\dfrac{U_0 - U}{R_{eq}} = P",
+              "display": "U × (U₀ − U) / R_eq = P",
+              "variables": [
+                {
+                  "symbol": "U",
+                  "meaning": "列车受电电压",
+                  "unit": "V"
+                },
+                {
+                  "symbol": "U₀",
+                  "meaning": "变电所空载电压",
+                  "unit": "V"
+                },
+                {
+                  "symbol": "R_eq",
+                  "meaning": "列车到等效电源的回路电阻",
+                  "unit": "Ω"
+                },
+                {
+                  "symbol": "P",
+                  "meaning": "列车功率",
+                  "unit": "W"
+                }
+              ],
+              "conditions": "列车按恒功率负荷，变电所按理想电压源加回路电阻。"
+            },
+            {
+              "latex": "U = \\dfrac{U_0 + \\sqrt{U_0^2 - 4PR_{eq}}}{2}",
+              "display": "U = (U₀ + √(U₀² − 4 P R_eq)) / 2",
+              "variables": [
+                {
+                  "symbol": "U",
+                  "meaning": "取较高的那个根",
+                  "unit": "V"
+                }
+              ],
+              "conditions": "U₀² ≥ 4PR_eq 时有解。"
+            }
+          ],
+          "workedExample": {
+            "problem": "两座 1500 V 牵引变电所相距 2 km，双边供电，列车位于正中，功率 2 MW。接触网与钢轨回路电阻共 0.04 Ω/km，忽略变电所内阻。求列车电压和电流。",
+            "steps": [
+              "每侧回路电阻 1 km × 0.04 = 0.04 Ω，两侧并联 R_eq = 0.02 Ω。",
+              "恒功率方程 U(1500 − U)/0.02 = 2×10⁶，即 U² − 1500U + 40000 = 0。",
+              "U = (1500 + √(1500² − 160000))/2 ≈ 1472.8 V。",
+              "I = 2×10⁶ / 1472.8 ≈ 1358 A。"
+            ],
+            "answer": "列车电压约 1473 V，电流约 1358 A"
+          },
+          "misconceptions": [
+            {
+              "wrong": "直流牵引网可以用交流电网的直流潮流方法计算。",
+              "correct": "直流潮流是交流网有功的线性近似；直流牵引网要按真实直流电路和恒功率负荷求解。"
+            },
+            {
+              "wrong": "钢轨回流完全流回变电所。",
+              "correct": "钢轨对地有泄漏，部分电流成为杂散电流，造成腐蚀。"
+            }
+          ],
+          "visualization": {
+            "calculator": "dc-traction-two-substations",
+            "params": [
+              {
+                "id": "U0",
+                "label": "变电所空载电压",
+                "unit": "V",
+                "min": 600,
+                "max": 1800,
+                "step": 10,
+                "default": 1500
+              },
+              {
+                "id": "P",
+                "label": "列车功率",
+                "unit": "MW",
+                "min": 0.1,
+                "max": 6,
+                "step": 0.1,
+                "default": 2
+              },
+              {
+                "id": "L",
+                "label": "变电所间距",
+                "unit": "km",
+                "min": 0.5,
+                "max": 5,
+                "step": 0.1,
+                "default": 2
+              },
+              {
+                "id": "x",
+                "label": "列车距左侧变电所",
+                "unit": "km",
+                "min": 0,
+                "max": 5,
+                "step": 0.05,
+                "default": 1
+              },
+              {
+                "id": "r",
+                "label": "回路电阻",
+                "unit": "Ω/km",
+                "min": 0.01,
+                "max": 0.1,
+                "step": 0.005,
+                "default": 0.04
+              }
+            ],
+            "output": "沿线网压分布与列车电压、电流",
+            "assumptions": "双边供电、恒功率列车、忽略变电所内阻与再生制动。"
+          },
+          "images": [],
+          "practice": [
+            {
+              "question": "上例若只有一座变电所单边供电（列车距其 1 km），列车电压约为多少？",
+              "answer": "约 1444 V",
+              "explanation": "R_eq = 0.04 Ω，U² − 1500U + 80000 = 0，U ≈ 1444.5 V。"
+            }
+          ],
+          "aiGuidance": {
+            "guidingQuestions": [
+              "列车按恒功率取电，网压下降时电流怎么变？这会带来什么问题？",
+              "双边供电相比单边供电有什么好处？"
+            ],
+            "constraints": [
+              "先让学生说出自己的理解，再逐步提示，不直接给出完整答案。",
+              "数值结论以计算器或课程给定答案为准，不自行心算。",
+              "说明所用近似和适用条件，教学参数不作为工程整定依据。"
+            ]
+          },
+          "sourceRefs": [
+            {
+              "title": "西南交通大学《电力系统分析》（中国大学 MOOC）对应章节主题",
+              "url": "https://www.icourse163.org/course/SWJTU-1465999174",
+              "lessonCodes": []
+            }
+          ],
+          "reviewStatus": "pending"
+        }
+      ]
+    }
+  ],
+  "calculators": [
+    "complex-power-triangle",
+    "dc-flow-3bus",
+    "dc-traction-two-substations",
+    "dq-transform",
+    "frequency-response",
+    "generator-sc-envelope",
+    "harmonic-spectrum",
+    "line-parameters",
+    "line-pi",
+    "line-voltage-drop",
+    "load-factor",
+    "long-line",
+    "nr-two-bus",
+    "off-nominal-pi",
+    "per-unit-convert",
+    "power-angle",
+    "radial-two-step",
+    "rated-voltage-chain",
+    "sc-three-phase",
+    "sequence-decomposition",
+    "short-circuit-waveform",
+    "traction-unbalance",
+    "transformer-params",
+    "unbalanced-fault",
+    "ungrounded-capacitive-current",
+    "ybus-builder",
+    "zip-load"
+  ]
+}

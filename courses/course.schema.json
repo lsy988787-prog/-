@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "course.schema.json",
+  "title": "课程包",
+  "description": "一门课程的全部内容。层级：课程 → chapters → concepts。schemaVersion 1.1。",
+  "type": "object",
+  "required": ["schemaVersion", "id", "title", "subject", "level", "source", "chapters"],
+  "properties": {
+    "schemaVersion": {"const": "1.1"},
+    "id": {"$ref": "#/$defs/slug"},
+    "title": {"type": "string", "minLength": 1},
+    "subject": {"type": "string", "minLength": 1},
+    "level": {"enum": ["小学", "初中", "高中", "大学"]},
+    "source": {"enum": ["preset", "upload"]},
+    "language": {"type": "string"},
+    "description": {"type": "string"},
+    "contentVersion": {"type": "string"},
+    "generatedOn": {"type": "string", "format": "date"},
+    "reviewStatus": {"$ref": "#/$defs/reviewStatus"},
+    "license": {"type": "object"},
+    "sourceRefs": {"type": "array", "items": {"$ref": "#/$defs/sourceRef"}},
+    "calculators": {"type": "array", "items": {"$ref": "#/$defs/slug"}},
+    "chapters": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/chapter"}}
+  },
+  "$defs": {
+    "slug": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+    "reviewStatus": {"enum": ["pending", "ai-generated", "user-confirmed", "teacher-reviewed"]},
+    "sourceRef": {
+      "type": "object",
+      "required": ["title"],
+      "properties": {
+        "title": {"type": "string"},
+        "url": {"type": "string"},
+        "note": {"type": "string"},
+        "lessonCodes": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "chapter": {
+      "type": "object",
+      "required": ["id", "order", "title", "concepts"],
+      "properties": {
+        "id": {"$ref": "#/$defs/slug"},
+        "order": {"type": "integer", "minimum": 1},
+        "title": {"type": "string", "minLength": 1},
+        "description": {"type": "string"},
+        "concepts": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/concept"}}
+      }
+    },
+    "formula": {
+      "type": "object",
+      "required": ["latex", "display", "variables"],
+      "properties": {
+        "latex": {"type": "string", "minLength": 1},
+        "display": {"type": "string", "minLength": 1},
+        "variables": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["symbol", "meaning", "unit"],
+            "properties": {"symbol": {"type": "string"}, "meaning": {"type": "string"}, "unit": {"type": "string"}}
+          }
+        },
+        "conditions": {"type": "string"}
+      }
+    },
+    "visualization": {
+      "type": "object",
+      "required": ["calculator", "params"],
+      "properties": {
+        "calculator": {"$ref": "#/$defs/slug"},
+        "params": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["id", "label", "unit", "min", "max", "step", "default"],
+            "properties": {
+              "id": {"type": "string"}, "label": {"type": "string"}, "unit": {"type": "string"},
+              "min": {"type": "number"}, "max": {"type": "number"}, "step": {"type": "number", "exclusiveMinimum": 0}, "default": {"type": "number"}
+            }
+          }
+        },
+        "output": {"type": "string"},
+        "assumptions": {"type": "string"}
+      }
+    },
+    "concept": {
+      "type": "object",
+      "required": ["id", "chapterId", "order", "title", "prerequisites", "summary", "explanation", "keyFormulas", "workedExample", "misconceptions", "practice", "reviewStatus"],
+      "properties": {
+        "id": {"$ref": "#/$defs/slug"},
+        "chapterId": {"$ref": "#/$defs/slug"},
+        "order": {"type": "integer", "minimum": 1},
+        "title": {"type": "string", "minLength": 1},
+        "prerequisites": {"type": "array", "items": {"$ref": "#/$defs/slug"}, "uniqueItems": true},
+        "summary": {"type": "string", "minLength": 1},
+        "explanation": {"type": "string", "minLength": 1},
+        "keyFormulas": {"type": "array", "items": {"$ref": "#/$defs/formula"}},
+        "workedExample": {
+          "type": "object",
+          "required": ["problem", "steps", "answer"],
+          "properties": {
+            "problem": {"type": "string"}, "steps": {"type": "array", "items": {"type": "string"}}, "answer": {"type": "string"}
+          }
+        },
+        "misconceptions": {
+          "type": "array",
+          "items": {"type": "object", "required": ["wrong", "correct"], "properties": {"wrong": {"type": "string"}, "correct": {"type": "string"}}}
+        },
+        "visualization": {"oneOf": [{"type": "null"}, {"$ref": "#/$defs/visualization"}]},
+        "images": {"type": "array", "items": {"type": "object", "required": ["src", "alt"], "properties": {"src": {"type": "string"}, "alt": {"type": "string"}}}},
+        "practice": {
+          "type": "array",
+          "items": {"type": "object", "required": ["question", "answer"], "properties": {"question": {"type": "string"}, "answer": {"type": "string"}, "explanation": {"type": "string"}}}
+        },
+        "aiGuidance": {
+          "type": "object",
+          "properties": {
+            "guidingQuestions": {"type": "array", "items": {"type": "string"}},
+            "constraints": {"type": "array", "items": {"type": "string"}}
+          }
+        },
+        "sourceRefs": {"type": "array", "items": {"$ref": "#/$defs/sourceRef"}},
+        "reviewStatus": {"$ref": "#/$defs/reviewStatus"}
+      }
+    }
+  }
+}
