@@ -4,13 +4,17 @@ from __future__ import annotations
 
 import logging
 import os
+from contextlib import asynccontextmanager
 from pathlib import Path
 
+import httpx
 from fastapi import FastAPI, HTTPException
 from fastapi.staticfiles import StaticFiles
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from .chat import make_router
 from .courses import load_courses
+from .quota import DailyQuota
 
 ROOT = Path(__file__).resolve().parents[2]
 COURSES_DIR = Path(os.environ.get("COURSES_DIR", ROOT / "courses"))
@@ -19,13 +23,27 @@ FRONTEND_DIST = Path(os.environ.get("FRONTEND_DIST", ROOT / "frontend" / "dist")
 log = logging.getLogger("ai_learning")
 
 
-def create_app(courses_dir: Path = COURSES_DIR) -> FastAPI:
+def create_app(
+    courses_dir: Path = COURSES_DIR,
+    transport: httpx.AsyncBaseTransport | None = None,
+    daily_limit: int | None = None,
+) -> FastAPI:
+    """transport 只在测试里传入，用来模拟模型服务。"""
     registry = load_courses(courses_dir)
     for err in registry.errors:
         log.error("课程未加载：%s", err)
 
-    app = FastAPI(title="AI 对话式学习平台")
+    @asynccontextmanager
+    async def lifespan(app: FastAPI):
+        timeout = httpx.Timeout(60.0, connect=10.0)
+        async with httpx.AsyncClient(transport=transport, timeout=timeout) as client:
+            app.state.http = client
+            yield
+
+    app = FastAPI(title="AI 对话式学习平台", lifespan=lifespan)
     app.state.registry = registry
+    limit = daily_limit if daily_limit is not None else int(os.environ.get("DAILY_MESSAGE_LIMIT", "40"))
+    app.include_router(make_router(DailyQuota(limit)))
 
     @app.get("/api/health")
     def health():
