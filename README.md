@@ -61,6 +61,7 @@ MODEL_API_KEY=你的密钥 uv run uvicorn app.main:app --port 8000
 
 ```bash
 cd backend && uv run pytest     # 课程结构校验、接口和 AI 导师测试（模拟模型，不消耗额度）
+cd frontend && npm test         # 计算器单元测试：用课程例题答案核对每个交互图示
 cd frontend && npm run build    # 类型检查 + 构建
 ```
 
@@ -78,6 +79,16 @@ python3 review_xlsx.py ../../courses/power-system-analysis.json 审校表.xlsx  
 
 新增一门课：在 `courses/` 放一个符合 `course.schema.json` 的 JSON 文件，重启后端即可在首页看到。
 任何一门课程有结构错误都会被拒绝加载，日志和 `/api/courses` 会指出文件和字段位置，不影响其他课程。
+
+## 交互图示（参数实验）
+
+知识点的 `visualization.calculator` 指向 `frontend/src/viz/registry.ts` 里注册的计算器 ID（白名单）。
+计算器是纯函数（`calcBasics.ts`、`calcAnalysis.ts`）：输入滑块参数，输出结果数值、提示和图表描述，
+由通用组件 `Charts.tsx` 画成曲线、相量图、柱状图、网络图或表格。新增一个图示的步骤：
+
+1. 在 `calcBasics.ts` 或 `calcAnalysis.ts` 写计算函数，并在 `registry.ts` 注册 ID；
+2. 在课程内容脚本里给知识点加 `visualization`（参数范围、默认值取例题数据），重新生成 JSON；
+3. 在 `calculators.test.ts` 加一条用例题答案核对的测试。测试会检查课程引用的计算器都已注册，且参数取默认值和两端时不出错。
 
 ## 约定
 

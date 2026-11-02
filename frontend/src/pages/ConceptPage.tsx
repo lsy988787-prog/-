@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import MathBlock from '../components/MathBlock'
 import TutorPanel from '../components/TutorPanel'
+import VizPanel from '../viz/VizPanel'
 import { chapterOf, findConcept, flatConcepts } from '../lib/course'
 import { useProgress } from '../lib/progress'
 import type { Concept, Practice } from '../lib/types'
@@ -74,20 +75,7 @@ export default function ConceptPage() {
           </section>
         )}
 
-        {concept.visualization && (
-          <section className="viz-placeholder">
-            <h2>参数实验</h2>
-            <p className="muted">交互图示正在制作中。上线后可以拖动下面这些参数，观察{concept.visualization.output ?? '结果'}的变化。</p>
-            <ul className="param-list">
-              {concept.visualization.params.map((p) => (
-                <li key={p.id}>
-                  {p.label}：{p.min} ~ {p.max} {p.unit !== '—' ? p.unit : ''}（默认 {p.default}）
-                </li>
-              ))}
-            </ul>
-            {concept.visualization.assumptions && <p className="conditions">假设：{concept.visualization.assumptions}</p>}
-          </section>
-        )}
+        {concept.visualization && <VizPanel key={concept.id} viz={concept.visualization} />}
 
         <WorkedExample concept={concept} />
 
