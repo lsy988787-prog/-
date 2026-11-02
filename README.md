@@ -14,6 +14,14 @@
 | `courses/` | 课程包 JSON 和结构约束 `course.schema.json`，每个 JSON 文件是一门课 |
 | `content/power-system-analysis/` | 电力系统分析课程内容的生成脚本（改内容改这里，再生成 JSON） |
 
+## 部署上线
+
+用 Docker 一键部署到服务器，步骤见 [docs/DEPLOY.md](docs/DEPLOY.md)：
+
+```bash
+sudo bash deploy/install.sh
+```
+
 ## 本地运行
 
 需要 Python 3.12+、[uv](https://docs.astral.sh/uv/)、Node.js 20+。

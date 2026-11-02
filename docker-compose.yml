@@ -1,0 +1,40 @@
+# 部署：cp .env.example .env，填好配置后 docker compose up -d --build
+# 详见 docs/DEPLOY.md
+name: ai-learning
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        NPM_REGISTRY: ${NPM_REGISTRY:-https://registry.npmjs.org}
+        PIP_INDEX_URL: ${PIP_INDEX_URL:-https://pypi.org/simple}
+    image: ai-learning-platform:latest
+    restart: unless-stopped
+    env_file: .env
+    volumes:
+      - papers:/data/papers          # 读文献的论文、翻译缓存和术语表
+    expose:
+      - "8000"                       # 只在内部网络开放，外部统一经过 Caddy
+
+  caddy:
+    image: caddy:2.10-alpine
+    restart: unless-stopped
+    depends_on:
+      - app
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    environment:
+      # 有域名时填域名（自动申请 HTTPS 证书）；没有域名先用 :80，按 IP 访问
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data             # 证书
+      - caddy_config:/config
+
+volumes:
+  papers:
+  caddy_data:
+  caddy_config:
