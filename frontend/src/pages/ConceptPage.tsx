@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import MathBlock from '../components/MathBlock'
+import TutorPanel from '../components/TutorPanel'
 import { chapterOf, findConcept, flatConcepts } from '../lib/course'
 import { useProgress } from '../lib/progress'
 import type { Concept, Practice } from '../lib/types'
@@ -12,6 +13,9 @@ export default function ConceptPage() {
   const { conceptId = '' } = useParams()
   const concept = findConcept(course, conceptId)
   const { visit } = useProgress()
+  const [tutor, setTutor] = useState({ open: false, draft: '' })
+  const openTutor = (draft = '') => setTutor({ open: true, draft })
+  const closeTutor = useCallback(() => setTutor({ open: false, draft: '' }), [])
 
   useEffect(() => {
     if (concept) visit(course.id, concept.id)
@@ -30,88 +34,96 @@ export default function ConceptPage() {
   const chapter = chapterOf(course, concept)
 
   return (
-    <main className="page concept" key={concept.id}>
-      <p className="eyebrow">
-        第 {chapter.order} 章 {chapter.title} · {concept.order}/{chapter.concepts.length}
-      </p>
-      <h1>{concept.title}</h1>
-      <p className="lead">{concept.summary}</p>
+    <>
+      <main className="page concept" key={concept.id}>
+        <p className="eyebrow">
+          第 {chapter.order} 章 {chapter.title} · {concept.order}/{chapter.concepts.length}
+        </p>
+        <h1>{concept.title}</h1>
+        <p className="lead">{concept.summary}</p>
 
-      <Prerequisites ids={concept.prerequisites} />
+        <Prerequisites ids={concept.prerequisites} />
 
-      <section>
-        <h2>讲解</h2>
-        <p className="prose">{concept.explanation}</p>
-      </section>
-
-      {concept.keyFormulas.length > 0 && (
         <section>
-          <h2>关键公式</h2>
-          {concept.keyFormulas.map((f, i) => (
-            <div className="formula" key={i}>
-              <MathBlock latex={f.latex} fallback={f.display} />
-              {f.variables.length > 0 && (
-                <dl className="variables">
-                  {f.variables.map((v) => (
-                    <div key={v.symbol}>
-                      <dt>{v.symbol}</dt>
-                      <dd>
-                        {v.meaning}
-                        {v.unit && v.unit !== '—' && <span className="unit">（{v.unit}）</span>}
-                      </dd>
-                    </div>
-                  ))}
-                </dl>
-              )}
-              {f.conditions && <p className="conditions">适用条件：{f.conditions}</p>}
-            </div>
-          ))}
+          <h2>讲解</h2>
+          <p className="prose">{concept.explanation}</p>
         </section>
-      )}
 
-      {concept.visualization && (
-        <section className="viz-placeholder">
-          <h2>参数实验</h2>
-          <p className="muted">交互图示正在制作中。上线后可以拖动下面这些参数，观察{concept.visualization.output ?? '结果'}的变化。</p>
-          <ul className="param-list">
-            {concept.visualization.params.map((p) => (
-              <li key={p.id}>
-                {p.label}：{p.min} ~ {p.max} {p.unit !== '—' ? p.unit : ''}（默认 {p.default}）
-              </li>
+        {concept.keyFormulas.length > 0 && (
+          <section>
+            <h2>关键公式</h2>
+            {concept.keyFormulas.map((f, i) => (
+              <div className="formula" key={i}>
+                <MathBlock latex={f.latex} fallback={f.display} />
+                {f.variables.length > 0 && (
+                  <dl className="variables">
+                    {f.variables.map((v) => (
+                      <div key={v.symbol}>
+                        <dt>{v.symbol}</dt>
+                        <dd>
+                          {v.meaning}
+                          {v.unit && v.unit !== '—' && <span className="unit">（{v.unit}）</span>}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+                )}
+                {f.conditions && <p className="conditions">适用条件：{f.conditions}</p>}
+              </div>
             ))}
-          </ul>
-          {concept.visualization.assumptions && <p className="conditions">假设：{concept.visualization.assumptions}</p>}
-        </section>
+          </section>
+        )}
+
+        {concept.visualization && (
+          <section className="viz-placeholder">
+            <h2>参数实验</h2>
+            <p className="muted">交互图示正在制作中。上线后可以拖动下面这些参数，观察{concept.visualization.output ?? '结果'}的变化。</p>
+            <ul className="param-list">
+              {concept.visualization.params.map((p) => (
+                <li key={p.id}>
+                  {p.label}：{p.min} ~ {p.max} {p.unit !== '—' ? p.unit : ''}（默认 {p.default}）
+                </li>
+              ))}
+            </ul>
+            {concept.visualization.assumptions && <p className="conditions">假设：{concept.visualization.assumptions}</p>}
+          </section>
+        )}
+
+        <WorkedExample concept={concept} />
+
+        {concept.misconceptions.length > 0 && (
+          <section>
+            <h2>常见误区</h2>
+            <ul className="misconceptions">
+              {concept.misconceptions.map((m, i) => (
+                <li key={i}>
+                  <p className="wrong">✗ {m.wrong}</p>
+                  <p className="right">✓ {m.correct}</p>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+
+        {concept.practice.map((p, i) => (
+          <PracticeCard key={i} practice={p} n={i + 1} />
+        ))}
+
+        <Questions concept={concept} onAsk={openTutor} />
+        <MasteryBar concept={concept} />
+
+        <nav className="pager">
+          {prev ? <Link to={`/course/${course.id}/${prev.id}`}>← {prev.title}</Link> : <span />}
+          {next ? <Link to={`/course/${course.id}/${next.id}`}>{next.title} →</Link> : <span />}
+        </nav>
+      </main>
+      {!tutor.open && (
+        <button className="tutor-fab" onClick={() => openTutor()}>
+          问 AI 导师
+        </button>
       )}
-
-      <WorkedExample concept={concept} />
-
-      {concept.misconceptions.length > 0 && (
-        <section>
-          <h2>常见误区</h2>
-          <ul className="misconceptions">
-            {concept.misconceptions.map((m, i) => (
-              <li key={i}>
-                <p className="wrong">✗ {m.wrong}</p>
-                <p className="right">✓ {m.correct}</p>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {concept.practice.map((p, i) => (
-        <PracticeCard key={i} practice={p} n={i + 1} />
-      ))}
-
-      <Questions concept={concept} />
-      <MasteryBar concept={concept} />
-
-      <nav className="pager">
-        {prev ? <Link to={`/course/${course.id}/${prev.id}`}>← {prev.title}</Link> : <span />}
-        {next ? <Link to={`/course/${course.id}/${next.id}`}>{next.title} →</Link> : <span />}
-      </nav>
-    </main>
+      <TutorPanel courseId={course.id} concept={concept} open={tutor.open} draft={tutor.draft} onClose={closeTutor} />
+    </>
   )
 }
 
@@ -195,7 +207,7 @@ function PracticeCard({ practice, n }: { practice: Practice; n: number }) {
   )
 }
 
-function Questions({ concept }: { concept: Concept }) {
+function Questions({ concept, onAsk }: { concept: Concept; onAsk: (text: string) => void }) {
   const course = useCourse()
   const { progress, addQuestion, removeQuestion } = useProgress()
   const [text, setText] = useState('')
@@ -208,9 +220,14 @@ function Questions({ concept }: { concept: Concept }) {
           {list.map((q, i) => (
             <li key={q.at}>
               <span>{q.text}</span>
-              <button className="link-button" onClick={() => removeQuestion(course.id, concept.id, i)} aria-label="删除这条疑问">
-                删除
-              </button>
+              <span className="question-actions">
+                <button className="link-button" onClick={() => onAsk(q.text)}>
+                  问 AI
+                </button>
+                <button className="link-button" onClick={() => removeQuestion(course.id, concept.id, i)} aria-label="删除这条疑问">
+                  删除
+                </button>
+              </span>
             </li>
           ))}
         </ul>

@@ -34,10 +34,33 @@ npm run dev
 
 只想用一个端口试用：先在 `frontend/` 下 `npm run build`，再启动后端，打开 http://localhost:8000 即可，后端会托管构建好的前端。
 
+## AI 导师（模型配置）
+
+每个知识点页面右下角有“问 AI 导师”。导师按课程资料出题追问，学生点“再给点提示”时逐级多讲一些
+（追问 → 指方向 → 给一步 → 讲透）。对话历史保存在学生自己的浏览器里，服务端不保存对话内容。
+
+平台额度通过后端环境变量配置（不要写进代码或提交到仓库）：
+
+| 变量 | 默认值 | 说明 |
+| --- | --- | --- |
+| `MODEL_API_KEY` | 无 | 平台模型密钥。不设置时平台额度不可用，学生仍可用自己的密钥 |
+| `MODEL_BASE_URL` | `https://api.deepseek.com` | 兼容 OpenAI Chat Completions 协议的接口地址 |
+| `MODEL_NAME` | `deepseek-chat` | 模型名 |
+| `DAILY_MESSAGE_LIMIT` | `40` | 每位学生每天的免费消息条数（按浏览器匿名 ID 计，重启清零） |
+
+```bash
+cd backend
+MODEL_API_KEY=你的密钥 uv run uvicorn app.main:app --port 8000
+```
+
+学生也可以在导师面板的“模型设置”里填自己的密钥（BYOK），不占平台额度。可选服务商限于
+`backend/app/llm.py` 里的白名单（DeepSeek、通义千问、Kimi、智谱、OpenAI），密钥只存在学生浏览器里，
+由服务端转发、不保存。
+
 ## 测试
 
 ```bash
-cd backend && uv run pytest     # 课程结构校验与接口测试
+cd backend && uv run pytest     # 课程结构校验、接口和 AI 导师测试（模拟模型，不消耗额度）
 cd frontend && npm run build    # 类型检查 + 构建
 ```
 
