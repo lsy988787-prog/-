@@ -76,22 +76,27 @@ export interface ChatHandlers {
   onDone: (remaining: number | null) => void
 }
 
+export function byokPayload(settings: ModelSettings) {
+  return settings.mode === 'byok' ? { provider: settings.provider, model: settings.model, apiKey: settings.apiKey } : null
+}
+
 /** 发送一轮对话并逐段回调。出错时抛出带中文说明的 Error。 */
-export async function streamChat(req: ChatRequest, handlers: ChatHandlers, signal?: AbortSignal) {
+export function streamChat(req: ChatRequest, handlers: ChatHandlers, signal?: AbortSignal) {
   const { settings, ...rest } = req
-  const body = {
-    ...rest,
-    byok: settings.mode === 'byok' ? { provider: settings.provider, model: settings.model, apiKey: settings.apiKey } : null,
-  }
-  const res = await fetch('/api/chat', {
+  return streamSSE('/api/chat', { ...rest, byok: byokPayload(settings) }, handlers, signal)
+}
+
+/** POST 一个 JSON 请求，按 SSE 逐段读取 {"delta"} / {"done"} / {"error"} 事件。 */
+export async function streamSSE(url: string, body: unknown, handlers: ChatHandlers, signal?: AbortSignal, headers: Record<string, string> = {}) {
+  const res = await fetch(url, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'X-Client-Id': clientId() },
+    headers: { 'Content-Type': 'application/json', 'X-Client-Id': clientId(), ...headers },
     body: JSON.stringify(body),
     signal,
   })
   if (!res.ok || !res.body) {
     const data = await res.json().catch(() => null)
-    const detail = typeof data?.detail === 'string' ? data.detail : `AI 导师暂时无法回答（${res.status}）`
+    const detail = typeof data?.detail === 'string' ? data.detail : `AI 暂时无法回答（${res.status}）`
     throw new Error(detail)
   }
 

@@ -5,6 +5,8 @@ import CourseLayout from './pages/CourseLayout'
 import CourseOverview from './pages/CourseOverview'
 import ConceptPage from './pages/ConceptPage'
 import NotFound from './pages/NotFound'
+import PaperPage from './pages/reader/PaperPage'
+import PapersPage from './pages/reader/PapersPage'
 
 export default function App() {
   return (
@@ -16,6 +18,8 @@ export default function App() {
           <Route index element={<CourseOverview />} />
           <Route path=":conceptId" element={<ConceptPage />} />
         </Route>
+        <Route path="/papers" element={<PapersPage />} />
+        <Route path="/papers/:paperId" element={<PaperPage />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </>
