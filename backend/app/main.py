@@ -14,11 +14,14 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from .chat import make_router
 from .courses import load_courses
+from .papers import PaperStore
 from .quota import DailyQuota
+from .reader_api import make_reader_router
 
 ROOT = Path(__file__).resolve().parents[2]
 COURSES_DIR = Path(os.environ.get("COURSES_DIR", ROOT / "courses"))
 FRONTEND_DIST = Path(os.environ.get("FRONTEND_DIST", ROOT / "frontend" / "dist"))
+PAPERS_DIR = Path(os.environ.get("PAPERS_DIR", ROOT / "backend" / "data" / "papers"))
 
 log = logging.getLogger("ai_learning")
 
@@ -27,6 +30,7 @@ def create_app(
     courses_dir: Path = COURSES_DIR,
     transport: httpx.AsyncBaseTransport | None = None,
     daily_limit: int | None = None,
+    papers_dir: Path | None = None,
 ) -> FastAPI:
     """transport 只在测试里传入，用来模拟模型服务。"""
     registry = load_courses(courses_dir)
@@ -44,6 +48,7 @@ def create_app(
     app.state.registry = registry
     limit = daily_limit if daily_limit is not None else int(os.environ.get("DAILY_MESSAGE_LIMIT", "40"))
     app.include_router(make_router(DailyQuota(limit)))
+    app.include_router(make_reader_router(PaperStore(papers_dir or PAPERS_DIR)))
 
     @app.get("/api/health")
     def health():

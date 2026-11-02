@@ -2,6 +2,7 @@ import { Link, useMatch, useNavigate } from 'react-router-dom'
 import { fetchCourses } from '../lib/api'
 import { useAsync } from '../lib/useAsync'
 import { useProgress } from '../lib/progress'
+import { getToken } from '../lib/reader'
 
 export default function Header() {
   const match = useMatch('/course/:courseId/*')
@@ -16,6 +17,12 @@ export default function Header() {
         <img src="/favicon.svg" alt="" width={24} height={24} />
         <span>AI 学习平台</span>
       </Link>
+      {/* 读文献只给负责人自己用：输入过口令的浏览器才显示入口，第一次请直接访问 /papers */}
+      {getToken() && (
+        <Link to="/papers" className="nav-link">
+          读文献
+        </Link>
+      )}
       {courses.status === 'ok' && courses.data.length > 0 && (
         <label className="subject-switch">
           <span className="visually-hidden">切换科目</span>
