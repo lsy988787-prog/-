@@ -7,7 +7,7 @@ const LEVEL_ORDER = ['小学', '初中', '高中', '大学']
 
 export default function HomePage() {
   const courses = useAsync(fetchCourses, [])
-  const { progress } = useProgress()
+  const { progress, dueReviews } = useProgress()
   const last = progress.lastVisited
 
   return (
@@ -45,6 +45,7 @@ export default function HomePage() {
                   </div>
                   <span className="muted small">
                     {c.chapterCount} 章 · {c.conceptCount} 个知识点 · 已掌握 {done}
+                    {dueReviews(c.id).length > 0 && ` · 今天要复习 ${dueReviews(c.id).length} 题`}
                   </span>
                 </Link>
               )

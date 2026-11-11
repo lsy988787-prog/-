@@ -387,3 +387,43 @@ section { margin: 28px 0; }
 .quick:hover:not(:disabled) { background: var(--accent-soft); }
 .quick:disabled { opacity: 0.45; cursor: default; }
 .tutor-intro .button { margin-bottom: 12px; }
+
+/* 知识点地图 */
+.dot.learning { border-color: var(--accent); background: linear-gradient(90deg, var(--accent) 50%, transparent 50%); }
+.dot.mastered { background: var(--good); border-color: var(--good); }
+.dot.review { background: var(--s4); border-color: var(--s4); }
+.map-title { margin-top: 8px; }
+.map-legend { list-style: none; padding: 0; margin: 0 0 12px; display: flex; flex-wrap: wrap; gap: 4px 16px; font-size: 0.88rem; }
+.map-legend li { display: flex; align-items: center; gap: 6px; }
+.map-chapter { font-size: 1rem; margin: 18px 0 8px; }
+.concept-map { list-style: none; padding: 0; margin: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 8px; }
+.map-node {
+  display: flex; align-items: center; gap: 8px; height: 100%; padding: 8px 12px; border-radius: 8px; text-decoration: none;
+  color: var(--text); background: var(--surface); border: 1px solid var(--border); line-height: 1.4; font-size: 0.93rem;
+}
+.map-node:hover { border-color: var(--accent); }
+.map-node.locked { border-style: dashed; color: var(--muted); }
+.map-node.mastered { background: var(--good-soft); border-color: transparent; }
+.map-node.review { background: var(--warn-soft); border-color: var(--s4); }
+.map-node.next { outline: 2px solid var(--accent); outline-offset: 1px; }
+.review-banner {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; margin: 16px 0 0; padding: 12px 16px;
+  border-radius: var(--radius); background: var(--warn-soft); border: 1px solid var(--s4); color: var(--text); text-decoration: none;
+}
+.toc-review { display: block; margin: 0 0 8px; padding: 4px 8px; border-radius: 6px; text-decoration: none; font-size: 0.92rem; }
+.toc-review.active { background: var(--accent-soft); }
+
+/* 节末小测与复习 */
+.quiz { padding: 16px; border-radius: var(--radius); background: var(--surface); border: 1px solid var(--border); margin-bottom: 20px; }
+.quiz-q { padding: 12px 0; border-top: 1px solid var(--border); }
+.quiz-q:first-of-type, .review-item .quiz-q { border-top: none; padding-top: 0; }
+.quiz-q .prose { margin: 0 0 4px; }
+.quiz-q .actions { margin-top: 8px; }
+.quiz-kind { margin: 0; font-size: 0.8rem; color: var(--muted); }
+.quiz-feedback { margin-top: 10px; padding: 8px 12px; border-radius: 8px; }
+.quiz-feedback.right { background: var(--good-soft); }
+.quiz-feedback.wrong { background: var(--bad-soft); }
+.quiz-feedback .link-button { margin-left: 8px; }
+.quiz-summary { margin-top: 12px; padding: 10px 14px; border-radius: 8px; background: var(--warn-soft); }
+.quiz-summary.right { background: var(--good-soft); }
+.quiz-summary .link-button, .quiz-summary a { margin-left: 8px; }

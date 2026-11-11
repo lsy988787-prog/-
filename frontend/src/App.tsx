@@ -5,6 +5,7 @@ import CourseLayout from './pages/CourseLayout'
 import CourseOverview from './pages/CourseOverview'
 import ConceptPage from './pages/ConceptPage'
 import NotFound from './pages/NotFound'
+import ReviewPage from './pages/ReviewPage'
 import PaperPage from './pages/reader/PaperPage'
 import PapersPage from './pages/reader/PapersPage'
 
@@ -16,6 +17,7 @@ export default function App() {
         <Route path="/" element={<HomePage />} />
         <Route path="/course/:courseId" element={<CourseLayout />}>
           <Route index element={<CourseOverview />} />
+          <Route path="review" element={<ReviewPage />} />
           <Route path=":conceptId" element={<ConceptPage />} />
         </Route>
         <Route path="/papers" element={<PapersPage />} />

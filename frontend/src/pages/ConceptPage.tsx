@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { Link, useParams, useSearchParams } from 'react-router-dom'
 import MathBlock from '../components/MathBlock'
+import Quiz from '../components/Quiz'
 import TutorPanel from '../components/TutorPanel'
 import VizPanel from '../viz/VizPanel'
 import { chapterOf, findConcept, flatConcepts } from '../lib/course'
 import { useProgress } from '../lib/progress'
-import type { Concept, Practice } from '../lib/types'
+import type { Concept } from '../lib/types'
 import { useCourse } from './CourseLayout'
 import NotFound from './NotFound'
 
@@ -110,9 +111,7 @@ export default function ConceptPage() {
           </section>
         )}
 
-        {concept.practice.map((p, i) => (
-          <PracticeCard key={i} practice={p} n={i + 1} />
-        ))}
+        <Quiz courseId={course.id} concept={concept} onAskTutor={openTutor} />
 
         <Questions concept={concept} onAsk={openTutor} />
         <MasteryBar concept={concept} />
@@ -192,26 +191,6 @@ function WorkedExample({ concept }: { concept: Concept }) {
   )
 }
 
-function PracticeCard({ practice, n }: { practice: Practice; n: number }) {
-  const [open, setOpen] = useState(false)
-  return (
-    <section className="practice">
-      <h2>自测 {n}</h2>
-      <p className="prose">{practice.question}</p>
-      {open ? (
-        <div className="answer-box">
-          <p className="answer">参考答案：{practice.answer}</p>
-          {practice.explanation && <p className="prose">{practice.explanation}</p>}
-        </div>
-      ) : (
-        <button className="button" onClick={() => setOpen(true)}>
-          写下答案后，看参考答案
-        </button>
-      )}
-    </section>
-  )
-}
-
 function Questions({ concept, onAsk }: { concept: Concept; onAsk: (text: string) => void }) {
   const course = useCourse()
   const { progress, addQuestion, removeQuestion } = useProgress()
@@ -265,7 +244,7 @@ function MasteryBar({ concept }: { concept: Concept }) {
   const done = isMastered(course.id, concept.id)
   return (
     <div className={`mastery ${done ? 'done' : ''}`}>
-      <span>{done ? '你已标记掌握这个知识点。' : '能独立做出例题和自测了吗？'}</span>
+      <span>{done ? '你已掌握这个知识点。' : '小测全对会自动标记掌握，也可以自己标记。'}</span>
       <button className={`button ${done ? '' : 'primary'}`} onClick={() => toggleMastered(course.id, concept.id)}>
         {done ? '取消掌握' : '标记为已掌握'}
       </button>
