@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 import MathBlock from '../components/MathBlock'
 import TutorPanel from '../components/TutorPanel'
 import VizPanel from '../viz/VizPanel'
@@ -14,7 +14,8 @@ export default function ConceptPage() {
   const { conceptId = '' } = useParams()
   const concept = findConcept(course, conceptId)
   const { visit } = useProgress()
-  const [tutor, setTutor] = useState({ open: false, draft: '' })
+  const [search, setSearch] = useSearchParams()
+  const [tutor, setTutor] = useState({ open: search.has('start'), draft: '' })
   const openTutor = (draft = '') => setTutor({ open: true, draft })
   const closeTutor = useCallback(() => setTutor({ open: false, draft: '' }), [])
 
@@ -25,6 +26,13 @@ export default function ConceptPage() {
   useEffect(() => {
     window.scrollTo(0, 0)
   }, [conceptId])
+
+  // 从“开始学习”进来时（?start=1）直接打开导师，然后把参数去掉，刷新页面不会重复触发
+  useEffect(() => {
+    if (!search.has('start')) return
+    setTutor({ open: true, draft: '' })
+    setSearch({}, { replace: true })
+  }, [search, setSearch])
 
   if (!concept) return <NotFound message="这个知识点不存在，可能已被移动或改名。" />
 
@@ -44,6 +52,15 @@ export default function ConceptPage() {
         <p className="lead">{concept.summary}</p>
 
         <Prerequisites ids={concept.prerequisites} />
+
+        {!tutor.open && (
+          <div className="learn-with-tutor">
+            <span>不知道从哪看起？让 AI 导师一步步问你，你只要回答。</span>
+            <button className="button primary" onClick={() => openTutor()}>
+              和 AI 导师一起学
+            </button>
+          </div>
+        )}
 
         <section>
           <h2>讲解</h2>

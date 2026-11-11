@@ -5,6 +5,25 @@ import ModelSettingsForm from './ModelSettingsForm'
 import RichText from './RichText'
 
 const LEVELS = ['追问', '指方向', '给一步', '讲透']
+const TOP = LEVELS.length - 1
+
+// 快捷回答：学生不用自己组织语言。“我不懂”最多升到“给一步”，只有主动点“给个提示”才会讲透。
+interface Quick {
+  label: (level: number) => string
+  text: (level: number) => string
+  next: (level: number) => number
+  disabled?: (level: number) => boolean
+}
+const QUICK: Quick[] = [
+  { label: () => '我不懂', text: () => '我不太懂，能换个更简单的说法吗？', next: (l) => Math.max(l, Math.min(l + 1, TOP - 1)) },
+  {
+    label: (l) => (l === TOP - 1 ? '看完整讲解' : '给个提示'),
+    text: (l) => (l === TOP - 1 ? '我还是想不出来，请完整讲一遍。' : '我卡住了，能给个提示吗？'),
+    next: (l) => Math.min(l + 1, TOP),
+    disabled: (l) => l >= TOP,
+  },
+  { label: () => '换个例子', text: () => '能换个例子说明吗？', next: (l) => l },
+]
 const HISTORY_PREFIX = 'ai-tutor-v1:'
 const MAX_SAVED = 40
 
@@ -45,6 +64,7 @@ export default function TutorPanel({ courseId, concept, open, draft, onClose }: 
   const abortRef = useRef<AbortController | null>(null)
   const listRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
+  const startedRef = useRef(new Set<string>())
 
   // 换知识点时切换到该知识点的对话
   useEffect(() => {
@@ -82,11 +102,12 @@ export default function TutorPanel({ courseId, concept, open, draft, onClose }: 
     return () => window.removeEventListener('keydown', onKey)
   }, [open, onClose])
 
+  // 发一轮对话。text 为空表示让导师先开口（对话还没开始时）。
   const send = useCallback(
     async (text: string, hintLevel: number) => {
       const content = text.trim()
-      if (!content || busy) return
-      const messages: ChatMessage[] = [...saved.messages, { role: 'user', content }]
+      if (busy || (!content && saved.messages.length > 0)) return
+      const messages: ChatMessage[] = content ? [...saved.messages, { role: 'user', content }] : []
       setSaved({ messages, hintLevel })
       setInput('')
       setError('')
@@ -114,7 +135,7 @@ export default function TutorPanel({ courseId, concept, open, draft, onClose }: 
         if (ctrl.signal.aborted) return
         // 失败时撤回这条提问，放回输入框，方便重发
         setSaved({ messages: saved.messages, hintLevel: saved.hintLevel })
-        setInput(content)
+        if (content) setInput(content)
         setError(e instanceof Error ? e.message : String(e))
       } finally {
         if (!ctrl.signal.aborted) {
@@ -126,12 +147,19 @@ export default function TutorPanel({ courseId, concept, open, draft, onClose }: 
     [busy, saved, courseId, concept.id, settings],
   )
 
-  const askHint = () => {
-    const level = Math.min(saved.hintLevel + 1, LEVELS.length - 1)
-    send(level === 3 ? '我还是想不出来，请完整讲一遍。' : '我卡住了，能再给点提示吗？', level)
-  }
+  const noModel = settings.mode === 'platform' && config !== null && !config.platformAvailable
+  const quotaOut = settings.mode === 'platform' && config !== null && config.remaining === 0
+  const empty = saved.messages.length === 0
+
+  // 打开一个还没开始的对话时，导师先开口提第一个问题；学生带着自己的问题进来时不抢话
+  useEffect(() => {
+    if (!open || !empty || busy || draft || !config || noModel || quotaOut || startedRef.current.has(key)) return
+    startedRef.current.add(key)
+    send('', 0)
+  }, [open, empty, busy, draft, config, noModel, quotaOut, key, send])
 
   const reset = () => {
+    startedRef.current.delete(key)
     abortRef.current?.abort()
     setSaved({ messages: [], hintLevel: 0 })
     setBusy(false)
@@ -142,8 +170,6 @@ export default function TutorPanel({ courseId, concept, open, draft, onClose }: 
   if (!open) return null
 
   const starters = concept.aiGuidance?.guidingQuestions ?? []
-  const noModel = settings.mode === 'platform' && config && !config.platformAvailable
-  const quotaOut = settings.mode === 'platform' && config && config.remaining === 0
 
   return (
     <aside className="tutor" role="dialog" aria-label="AI 导师">
@@ -156,7 +182,7 @@ export default function TutorPanel({ courseId, concept, open, draft, onClose }: 
           <button className="link-button" onClick={() => setShowSettings((s) => !s)} aria-expanded={showSettings}>
             模型设置
           </button>
-          {saved.messages.length > 0 && (
+          {!empty && (
             <button className="link-button" onClick={reset}>
               新对话
             </button>
@@ -181,9 +207,15 @@ export default function TutorPanel({ courseId, concept, open, draft, onClose }: 
       )}
 
       <div className="tutor-list" ref={listRef} aria-live="polite">
-        {saved.messages.length === 0 && !busy && (
+        {empty && !busy && (
           <div className="tutor-intro">
-            <p>我不会直接告诉你答案，而是通过提问帮你自己想明白。先说说你对“{concept.title}”的理解，或者从下面挑一个问题开始：</p>
+            <p>我不会直接告诉你答案，而是一步步提问，帮你自己想明白。你只要回答我的问题就行，说错了也没关系。</p>
+            {!noModel && !quotaOut && (
+              <button className="button primary" onClick={() => send('', 0)}>
+                开始，请导师先提问
+              </button>
+            )}
+            {starters.length > 0 && <p className="small muted">也可以从这些问题开始：</p>}
             {starters.map((q) => (
               <button key={q} className="starter" onClick={() => send(q, 0)} disabled={busy}>
                 {q}
@@ -196,7 +228,11 @@ export default function TutorPanel({ courseId, concept, open, draft, onClose }: 
             {m.role === 'assistant' ? <RichText text={m.content} /> : <p>{m.content}</p>}
           </div>
         ))}
-        {busy && <div className="bubble assistant">{streaming ? <RichText text={streaming} /> : <p className="muted">正在思考…</p>}</div>}
+        {busy && (
+          <div className="bubble assistant">
+            {streaming ? <RichText text={streaming} /> : <p className="muted">{empty ? '导师正在准备第一个问题…' : '正在思考…'}</p>}
+          </div>
+        )}
       </div>
 
       {error && (
@@ -208,8 +244,23 @@ export default function TutorPanel({ courseId, concept, open, draft, onClose }: 
       {!error && !noModel && quotaOut && <p className="notice tutor-notice">今天的免费额度已用完，明天再来，或在“模型设置”里改用自己的密钥。</p>}
 
       <div className="tutor-foot">
+        {!empty && (
+          <div className="quick-replies" role="group" aria-label="快捷回答">
+            {QUICK.map((q, i) => (
+              <button
+                key={i}
+                className="quick"
+                type="button"
+                onClick={() => send(q.text(saved.hintLevel), q.next(saved.hintLevel))}
+                disabled={busy || q.disabled?.(saved.hintLevel)}
+              >
+                {q.label(saved.hintLevel)}
+              </button>
+            ))}
+          </div>
+        )}
         <div className="tutor-meta small muted">
-          <span title="点“再给点提示”会逐级多讲一些">
+          <span title="点“我不懂”或“给个提示”会逐级多讲一些">
             提示等级：{LEVELS[saved.hintLevel]}（{saved.hintLevel + 1}/4）
           </span>
           {settings.mode === 'platform' && config?.platformAvailable && (
@@ -237,20 +288,12 @@ export default function TutorPanel({ courseId, concept, open, draft, onClose }: 
             }}
             rows={2}
             maxLength={2000}
-            placeholder="写下你的想法或问题（Enter 发送，Shift+Enter 换行）"
+            placeholder={empty ? '也可以直接写下你的问题' : '回答导师的问题，说错了也没关系（Enter 发送）'}
             aria-label="给 AI 导师的消息"
           />
           <div className="actions">
             <button className="button primary" type="submit" disabled={busy || !input.trim()}>
               发送
-            </button>
-            <button
-              className="button"
-              type="button"
-              onClick={askHint}
-              disabled={busy || saved.messages.length === 0 || saved.hintLevel >= LEVELS.length - 1}
-            >
-              再给点提示
             </button>
             {busy && (
               <button

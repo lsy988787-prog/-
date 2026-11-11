@@ -14,7 +14,7 @@ export default function HomePage() {
     <main className="page">
       <section className="hero">
         <h1>选一门课，开始学</h1>
-        <p>每个知识点都有讲解、公式、分步例题和自测。卡住了就记下疑问，AI 导师会一步步追问引导你想明白（即将上线）。</p>
+        <p>不用会提问：选一门课，点“开始学习”，AI 导师会先提问，一步步引导你自己想明白。每个知识点还有讲解、公式、分步例题和自测。</p>
       </section>
 
       {last && (

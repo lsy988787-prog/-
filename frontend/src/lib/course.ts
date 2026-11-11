@@ -18,3 +18,9 @@ export function matches(concept: Concept, query: string): boolean {
   if (!q) return true
   return [concept.title, concept.summary, concept.explanation].some((t) => t.toLowerCase().includes(q))
 }
+
+/** 推荐下一个该学的知识点：按课程顺序，第一个还没掌握、且前置知识都已掌握的；都卡住时退回第一个没掌握的。 */
+export function recommendNext(course: Course, isMastered: (conceptId: string) => boolean): Concept | undefined {
+  const pending = flatConcepts(course).filter((c) => !isMastered(c.id))
+  return pending.find((c) => c.prerequisites.every((p) => isMastered(p) || !findConcept(course, p))) ?? pending[0]
+}
