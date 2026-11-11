@@ -1,6 +1,7 @@
 """AI 导师对话接口。
 
-POST /api/chat        流式返回（text/event-stream），每个事件是一行 JSON：
+POST /api/chat        messages 为空表示刚进入知识点，由导师先开口提第一个问题。
+                      流式返回（text/event-stream），每个事件是一行 JSON：
                       {"delta": "..."} 逐段文字；{"done": true, "remaining": n} 结束；{"error": "..."} 出错。
 GET  /api/chat/config 前端用来决定显示什么：平台额度是否可用、今天还剩几条、可选的服务商。
 
@@ -40,7 +41,7 @@ class Byok(BaseModel):
 class ChatRequest(BaseModel):
     courseId: str
     conceptId: str
-    messages: list[ChatMessage] = Field(min_length=1, max_length=200)
+    messages: list[ChatMessage] = Field(default_factory=list, max_length=200)
     hintLevel: int = Field(default=0, ge=0, le=MAX_LEVEL)
     byok: Byok | None = None
 
@@ -78,7 +79,7 @@ def make_router(quota: DailyQuota) -> APIRouter:
         )
         if concept is None:
             raise HTTPException(404, f"知识点不存在：{body.conceptId}")
-        if body.messages[-1].role != "user":
+        if body.messages and body.messages[-1].role != "user":
             raise HTTPException(422, "最后一条消息应当来自学生")
 
         if body.byok:
@@ -96,8 +97,6 @@ def make_router(quota: DailyQuota) -> APIRouter:
             raise HTTPException(429, f"今天的 {quota.limit} 条免费额度已用完，明天再来，或在设置里改用自己的密钥。")
 
         history = [m.model_dump() for m in body.messages[-MAX_HISTORY:]]
-        if history[0]["role"] != "user":  # 截断后保证从学生的话开始
-            history = history[1:]
         messages = build_messages(course, concept, history, body.hintLevel)
         client: httpx.AsyncClient = request.app.state.http
 

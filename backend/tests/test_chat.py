@@ -140,14 +140,14 @@ def test_long_history_is_trimmed_and_starts_with_user(client, model):
     body = {"courseId": COURSE, "conceptId": CONCEPT, "messages": msgs}
     assert client.post("/api/chat", json=body).status_code == 200
     sent = json.loads(model.requests[0].content)["messages"][1:]
-    assert len(sent) <= 20 and sent[0]["role"] == "user" and sent[-1]["content"] == "最后一问"
+    assert len(sent) <= 21 and sent[0]["role"] == "user" and sent[-1]["content"] == "最后一问"
 
 
 def test_system_prompt_levels_and_content(client):
     course = client.app.state.registry.courses[COURSE]
     concept = next(c for ch in course["chapters"] for c in ch["concepts"] if c["id"] == CONCEPT)
     p0, p3 = system_prompt(course, concept, 0), system_prompt(course, concept, 3)
-    assert "L0" in p0 and "L3" in p3 and "L3" not in p0
+    assert "提示等级 L0" in p0 and "提示等级 L3" in p3 and "提示等级 L3" not in p0
     for piece in (concept["workedExample"]["answer"], concept["aiGuidance"]["guidingQuestions"][0],
                   concept["misconceptions"][0]["wrong"], concept["keyFormulas"][0]["latex"]):
         assert piece in p0
@@ -160,3 +160,30 @@ def test_quota_resets_next_day():
     assert q.take("a") and not q.take("a")
     day[0] = date(2026, 11, 2)
     assert q.remaining("a") == 1 and q.take("a")
+
+
+def test_empty_messages_lets_tutor_open_first(client, model):
+    body = {"courseId": COURSE, "conceptId": CONCEPT, "messages": []}
+    resp = client.post("/api/chat", json=body, headers={"X-Client-Id": "student-0001"})
+    assert resp.status_code == 200
+    assert events(resp)[-1] == {"done": True, "remaining": 1}  # 导师开口也算一条额度
+    sent = json.loads(model.requests[0].content)["messages"]
+    assert "先开口" in sent[0]["content"]
+    assert [m["role"] for m in sent[1:]] == ["user"]
+
+
+def test_history_opened_by_tutor_keeps_tutor_question(client, model):
+    msgs = [{"role": "assistant", "content": "导线越长，电阻会怎样？"}, {"role": "user", "content": "变大"}]
+    body = {"courseId": COURSE, "conceptId": CONCEPT, "messages": msgs}
+    assert client.post("/api/chat", json=body).status_code == 200
+    sent = json.loads(model.requests[0].content)["messages"]
+    assert "先开口" not in sent[0]["content"]
+    assert [m["role"] for m in sent[1:]] == ["user", "assistant", "user"]
+    assert sent[2:] == msgs
+
+
+def test_prompt_withholds_answers_before_l3(client):
+    course = client.app.state.registry.courses[COURSE]
+    concept = next(c for ch in course["chapters"] for c in ch["concepts"] if c["id"] == CONCEPT)
+    p0 = system_prompt(course, concept, 0)
+    assert "在 L3 之前" in p0 and "给个提示" in p0 and "我不懂" in p0 and "换个例子" in p0

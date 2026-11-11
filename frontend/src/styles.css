@@ -369,3 +369,21 @@ section { margin: 28px 0; }
   .reader-panel.open { display: flex; }
   .reader-panel .reader-close, .reader-fab { display: inline-block; }
 }
+
+/* 引导式学习 */
+.today { margin: 16px 0 28px; padding: 16px 20px; border: 1px solid var(--accent); border-radius: var(--radius); background: var(--accent-soft); }
+.today h2 { font-size: 1.3rem; margin: 0.1em 0 0.3em; }
+.today p { margin: 0 0 0.5em; }
+.today .actions { margin-top: 12px; align-items: center; }
+.learn-with-tutor {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px 16px;
+  margin: 12px 0 20px; padding: 10px 14px; border-radius: var(--radius); background: var(--accent-soft);
+}
+.quick-replies { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.quick {
+  padding: 4px 12px; border-radius: 99px; border: 1px solid var(--accent); background: var(--surface);
+  color: var(--accent); cursor: pointer; font-size: 0.9rem;
+}
+.quick:hover:not(:disabled) { background: var(--accent-soft); }
+.quick:disabled { opacity: 0.45; cursor: default; }
+.tutor-intro .button { margin-bottom: 12px; }
