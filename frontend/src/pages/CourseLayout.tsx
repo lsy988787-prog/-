@@ -17,7 +17,7 @@ export default function CourseLayout() {
   const [query, setQuery] = useState('')
   const [open, setOpen] = useState(false)
   const location = useLocation()
-  const { isMastered } = useProgress()
+  const { isMastered, status } = useProgress()
 
   // 手机上选完知识点后自动收起目录
   useEffect(() => setOpen(false), [location.pathname])
@@ -43,6 +43,9 @@ export default function CourseLayout() {
           onChange={(e) => setQuery(e.target.value)}
           aria-label="搜索知识点"
         />
+        <NavLink to={`/course/${course.id}/review`} className="toc-review">
+          今日复习
+        </NavLink>
         <nav>
           {course.chapters.map((ch) => {
             const shown = ch.concepts.filter((c) => matches(c, query))
@@ -56,7 +59,7 @@ export default function CourseLayout() {
                   {shown.map((c) => (
                     <li key={c.id}>
                       <NavLink to={`/course/${course.id}/${c.id}`}>
-                        <span className={`dot ${isMastered(course.id, c.id) ? 'done' : ''}`} aria-hidden />
+                        <span className={`dot ${status(course.id, c.id)}`} aria-hidden />
                         <span>{c.title}</span>
                         {isMastered(course.id, c.id) && <span className="visually-hidden">（已掌握）</span>}
                       </NavLink>
